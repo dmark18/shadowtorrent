@@ -79,7 +79,7 @@
     min-height: 100vh;
     width: 100%;
     box-sizing: border-box;
-    overflow-x: hidden; /* 🚫 Ne lógjon ki semmi vízszintesen */
+    overflow-x: hidden; 
     margin-bottom: 50px;
   }
   
@@ -129,7 +129,7 @@
     overflow-x: hidden;
     margin-top: 40px;
     box-sizing: border-box;
-    padding: 0 10px; /* kis padding hogy mobilon se lógjon ki */
+    padding: 0 10px;
   }
   
   .carousel-container h3 {
@@ -192,7 +192,6 @@
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   }
   
-  /* ✅ Mobil reszponzivitás */
   @media (max-width: 768px) {
     .home-container {
       padding: 20px;

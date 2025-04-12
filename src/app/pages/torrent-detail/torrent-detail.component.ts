@@ -47,7 +47,6 @@ export class TorrentDetailComponent implements OnInit {
 
     this.isBanned = this.currentUser.banned ?? false;
 
-    // 🔧 Az ID-t a route paraméterből olvassuk ki
     const idParam = this.route.snapshot.paramMap.get('id');
     this.torrentId = idParam ? Number(idParam) : NaN;
 

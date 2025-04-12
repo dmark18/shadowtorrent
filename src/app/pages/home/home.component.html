@@ -1,6 +1,5 @@
 <div class="home-container">
 
-  <!-- 👤 Üdvözlés -->
   <div *ngIf="currentUser; else guestMessage">
     <div class="welcome-box">
       <h2>Üdvözöllek, <span class="username">{{ currentUser.username }}</span>!</h2>
@@ -35,7 +34,6 @@
     </mat-form-field>
   </div>
 
-  <!-- 🎯 Legseedeltebb torrentek -->
   <div class="carousel-container">
     <h3>Legseedeltebb Torrentek</h3>
     <div #topCarousel *ngIf="topTorrents.length > 0" class="carousel">
@@ -51,7 +49,6 @@
     </div>
   </div>
 
-  <!-- 🆕 Friss feltöltések -->
   <div class="carousel-container">
     <h3>Frissen Jóváhagyott</h3>
     <div #recentCarousel *ngIf="recentTorrents.length > 0" class="carousel">

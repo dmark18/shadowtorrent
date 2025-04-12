@@ -17,9 +17,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class AdminComponent implements OnInit {
   currentUser: any;
-  torrents: Torrent[] = [];  // Függőben lévő torrentek (pending)
-  approvedTorrents: Torrent[] = [];  // Elfogadott torrentek
-  rejectedTorrents: Torrent[] = [];  // Elutasított torrentek
+  torrents: Torrent[] = [];  
+  approvedTorrents: Torrent[] = []; 
+  rejectedTorrents: Torrent[] = [];  
   rejectReason: string = '';
   users: User[] = [];
 
@@ -83,10 +83,10 @@ export class AdminComponent implements OnInit {
     this.users[index].banned = !this.users[index].banned;
     localStorage.setItem('users', JSON.stringify(this.users));
   
-    // Ha az éppen bejelentkezett felhasználót tiltottuk ki vagy engedtük fel
+
     const currentUser = this.userService.currentUserValue;
     if (currentUser && currentUser.id === this.users[index].id) {
-      this.userService.login(this.users[index]); // újra bejelentkeztetjük a friss adatokkal
+      this.userService.login(this.users[index]); 
     }
   }
 }

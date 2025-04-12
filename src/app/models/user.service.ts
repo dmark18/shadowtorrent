@@ -21,17 +21,17 @@ export class UserService {
   }
 
   login(user: User): void {
-    console.log('Storing user:', user); // Debug log
+    console.log('Storing user:', user); 
     localStorage.setItem('currentUser', JSON.stringify(user));
     this.currentUserSubject.next(user);
-    this.forceUpdate(); // Extra guarantee
+    this.forceUpdate(); 
   }
 
   logout(): void {
-    console.log('Clearing user'); // Debug log
+    console.log('Clearing user'); 
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
-    this.forceUpdate(); // Extra guarantee
+    this.forceUpdate(); 
   }
 
   private forceUpdate(): void {
@@ -53,7 +53,7 @@ export class UserService {
       users[userIndex].rejectedTorrents = rejectedTorrents;
       localStorage.setItem('users', JSON.stringify(users));
   
-      // **Ha a bejelentkezett felhasználót érinti a változás, frissítsük őt is**
+      
       if (this.currentUserValue?.id === userId) {
         this.currentUserSubject.next(users[userIndex]);
       }

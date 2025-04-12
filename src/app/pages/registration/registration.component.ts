@@ -15,7 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./registration.component.scss'],
   imports: [
     CommonModule,
-    ReactiveFormsModule, // <<< ERRE SZÜKSÉG VAN!
+    ReactiveFormsModule, 
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule
@@ -47,7 +47,7 @@ export class RegisterComponent {
         password: this.registerForm.value.password,
         banned: false,
         role: 'user',
-        rejectedTorrents: [], // Alapértelmezett szerepkör
+        rejectedTorrents: [],
         torrents: []
         
       };

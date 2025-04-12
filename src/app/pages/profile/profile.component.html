@@ -19,7 +19,6 @@
     <p *ngIf="uploadedTorrents.length === 0">Nincsenek feltöltött torrentjeid.</p>
 
     <div *ngIf="uploadedTorrents.length > 0">
-      <!-- Asztali táblázat -->
       <table class="desktop-table">
         <thead>
           <tr>
@@ -36,12 +35,11 @@
             <td>{{ torrent.category }}</td>
             <td>{{ torrent.uploader }}</td>
             <td>{{ torrent.status }}</td>
-            <td><!-- Műveletek --></td>
+            <td></td>
           </tr>
         </tbody>
       </table>
 
-      <!-- Mobil kártyák -->
       <div class="mobile-cards">
         <div class="torrent-card" *ngFor="let torrent of uploadedTorrents">
           <p><strong>Név:</strong> {{ torrent.name }}</p>
@@ -59,7 +57,6 @@
     <p *ngIf="rejectedTorrents.length === 0">Nincsenek elutasított torrentjeid.</p>
 
     <div *ngIf="rejectedTorrents.length > 0">
-      <!-- Asztali táblázat -->
       <table class="desktop-table">
         <thead>
           <tr>
@@ -83,7 +80,6 @@
         </tbody>
       </table>
 
-      <!-- Mobil kártyák -->
       <div class="mobile-cards">
         <div class="torrent-card" *ngFor="let torrent of rejectedTorrents">
           <p><strong>Név:</strong> {{ torrent.name }}</p>

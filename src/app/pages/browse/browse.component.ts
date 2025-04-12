@@ -15,7 +15,7 @@ interface Torrent {
   seeders: number;
   leechers: number;
   status: string;
-  imageUrl: string; // Hozzáadva: csak 'approved' státuszúak jelennek meg
+  imageUrl: string;
 }
 
 @Component({
@@ -54,7 +54,6 @@ export class BrowseComponent implements OnInit {
 
   loadTorrents(): void {
     this.torrents = JSON.parse(localStorage.getItem('torrents') || '[]');
-    // Csak a jóváhagyott torrenteket mutassuk
     this.torrents = this.torrents.filter(torrent => torrent.status === 'approved');
     this.torrents.forEach(torrent => {
       if (!torrent.imageUrl) {

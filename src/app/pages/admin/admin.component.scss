@@ -11,6 +11,7 @@
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   font-family: 'Chakra Petch', sans-serif;
   margin-bottom: 50px;
+  background: linear-gradient(25deg, #061258, #062652);
 }
 
 h2, h3 {
@@ -93,7 +94,6 @@ button.ban:hover {
   display: none;
 }
 
-/* Mobilnézet */
 @media (max-width: 768px) {
   .desktop-only {
     display: none;

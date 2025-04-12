@@ -89,7 +89,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     const torrents: Torrent[] = JSON.parse(localStorage.getItem('torrents') || '[]');
     this.allTorrents = torrents;
 
-    // Képek fallback
     torrents.forEach(torrent => {
       if (!torrent.imageUrl) {
         torrent.imageUrl = 'https://cdn-icons-png.flaticon.com/512/28/28969.png';
@@ -104,7 +103,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       .sort((a, b) => b.id - a.id)
       .slice(0, 5);
 
-    // Leggyakoribb kategória meghatározása
+
     const categoryCount: { [key: string]: number } = {};
     torrents.forEach(t => {
       categoryCount[t.category] = (categoryCount[t.category] || 0) + 1;
@@ -114,7 +113,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       categoryCount[a] > categoryCount[b] ? a : b
     );
 
-    // Legjobb seed/peer arányú torrentek kiválasztása a leggyakoribb kategóriából
     this.bestRatioTorrents = torrents
       .filter(t => t.category === this.mostCommonCategory && t.leechers > 0)
       .map(t => ({
@@ -123,7 +121,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       }))
       .sort((a, b) => b.ratio - a.ratio)
       .slice(0, 5)
-      .map(({ ratio, ...rest }) => rest); // eltávolítjuk a segéd 'ratio' mezőt
+      .map(({ ratio, ...rest }) => rest); 
 
     this.filteredTorrents$ = this.searchControl.valueChanges.pipe(
       startWith(''),

@@ -33,7 +33,7 @@ export class CommentSectionComponent implements OnInit {
       return;
     }
   
-    // Frissítsük a tiltás állapotát
+
     this.isBanned = this.currentUser.banned ?? false;
     this.loadComments();
 
@@ -59,6 +59,6 @@ export class CommentSectionComponent implements OnInit {
     this.commentService.addComment(comment);
     this.newComment = '';
     this.loadComments();
-    this.commentAdded.emit(); // <-- Ez itt az @Output esemény
+    this.commentAdded.emit();
   }
 }

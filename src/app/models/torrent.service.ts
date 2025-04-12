@@ -11,12 +11,11 @@ export class TorrentService {
 
   constructor(private http: HttpClient) {}
 
-  // Torrent feltöltése
+
   uploadTorrent(formData: FormData): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/upload`, formData);
   }
 
-  // Felhasználó torrentjeinek lekérése
   getUserTorrents(userId: number): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/user/${userId}`);
   }

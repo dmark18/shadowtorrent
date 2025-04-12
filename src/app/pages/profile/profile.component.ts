@@ -15,8 +15,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class ProfileComponent implements OnInit {
   currentUser: User | null = null;
   isBanned: boolean = false;
-  rejectedTorrents: any[] = [];  // Deklaráljuk a rejectedTorrents változót
-  uploadedTorrents: any[] = [];  // Feltöltött torrentek (pending, approved)
+  rejectedTorrents: any[] = []; 
+  uploadedTorrents: any[] = [];  
   dataLoaded = false;
 
   constructor(
@@ -34,17 +34,14 @@ export class ProfileComponent implements OnInit {
       return;
     }
   
-    // Frissítsük a tiltás állapotát
     this.isBanned = this.currentUser.banned ?? false;
   
-    // Feltöltött torrentek (pending és approved)
     let allTorrents = JSON.parse(localStorage.getItem('torrents') || '[]');
     this.uploadedTorrents = allTorrents.filter((torrent: Torrent) =>
       torrent.uploader === this.currentUser?.username &&
       (torrent.status === 'pending' || torrent.status === 'approved')
     );
   
-    // Elutasított torrentek
     this.rejectedTorrents = allTorrents.filter((torrent: Torrent) =>
       torrent.uploader === this.currentUser?.username && torrent.status === 'rejected'
     );
@@ -84,10 +81,8 @@ export class ProfileComponent implements OnInit {
 
   localStorage.setItem('torrents', JSON.stringify(torrents));
 
-  // Frissítjük a nézetet
   this.ngOnInit();
 
-  // SnackBar: csak akkor jelezzen, ha valóban történt törlés
   if (afterCount < beforeCount) {
     this.snackBar.open('A torrent sikeresen törölve lett.', 'Bezár', {
       duration: 3000,

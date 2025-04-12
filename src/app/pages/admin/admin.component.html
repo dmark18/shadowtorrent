@@ -1,10 +1,9 @@
 <div class="admin-container" *ngIf="currentUser && currentUser.role === 'admin'">
   <h2>Admin Felület</h2>
 
-  <!-- Jóváhagyott torrentek -->
   <h3>Jóváhagyott Torrentek</h3>
 
-  <!-- Mobilnézet -->
+
   <div class="mobile-only">
     <div class="torrent-card" *ngFor="let torrent of approvedTorrents">
       <p><strong>Név:</strong> {{ torrent.name }}</p>
@@ -16,7 +15,6 @@
     </div>
   </div>
 
-  <!-- Asztali nézet -->
   <table class="desktop-only">
     <thead>
       <tr>
@@ -40,10 +38,10 @@
     </tbody>
   </table>
 
-  <!-- Újonnan feltöltött torrentek -->
+
   <h3>Újonnan feltöltött Torrentek</h3>
 
-  <!-- Mobilnézet -->
+
   <div class="mobile-only">
     <div class="torrent-card" *ngFor="let torrent of torrents">
       <p><strong>Név:</strong> {{ torrent.name }}</p>
@@ -59,7 +57,6 @@
     </div>
   </div>
 
-  <!-- Asztali nézet -->
   <table class="desktop-only">
     <thead>
       <tr>
@@ -87,10 +84,8 @@
     </tbody>
   </table>
 
-  <!-- Elutasított torrentek -->
   <h3>Elutasított Torrentek</h3>
 
-  <!-- Mobilnézet -->
   <div class="mobile-only">
     <div class="torrent-card" *ngFor="let torrent of rejectedTorrents">
       <p><strong>Név:</strong> {{ torrent.name }}</p>
@@ -101,7 +96,6 @@
     </div>
   </div>
 
-  <!-- Asztali nézet -->
   <table class="desktop-only">
     <thead>
       <tr>
@@ -123,10 +117,8 @@
     </tbody>
   </table>
 
-  <!-- Felhasználók -->
   <h3>Felhasználók</h3>
 
-  <!-- Mobilnézet -->
   <div class="mobile-only">
     <div class="torrent-card" *ngFor="let user of users; let i = index">
       <p><strong>Felhasználónév:</strong> {{ user.username }}</p>
@@ -138,7 +130,6 @@
     </div>
   </div>
 
-  <!-- Asztali nézet -->
   <table class="desktop-only">
     <thead>
       <tr>

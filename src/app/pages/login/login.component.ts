@@ -47,7 +47,6 @@ export class LoginComponent {
       );
       
       if (user) {
-        // Use UserService instead of direct localStorage
         this.userService.login(user);
         
         this.snackBar.open('Sikeres bejelentkezés!', 'Bezár', { 
@@ -55,9 +54,8 @@ export class LoginComponent {
           panelClass: ['success-snackbar']
         });
         
-        // Force navigation and refresh
         this.router.navigate(['/profile']).then(() => {
-          window.location.reload(); // Full refresh to ensure state updates
+          window.location.reload(); 
         });
       } else {
         this.snackBar.open('Hibás email vagy jelszó!', 'Bezár', { 

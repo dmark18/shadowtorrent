@@ -44,7 +44,7 @@ export class UploadComponent implements OnInit {
   torrentName: string = '';
   selectedCategory: string = 'Minden';
   selectedFile: File | null = null;
-  torrentImageUrl: string = ''; // Kép URL
+  torrentImageUrl: string = ''; 
 
   constructor(
     private router: Router,
@@ -90,7 +90,6 @@ export class UploadComponent implements OnInit {
       return;
     }
 
-    // Initialize torrents array if missing
     if (!currentUser.torrents) {
       currentUser.torrents = [];
     }
@@ -105,17 +104,14 @@ export class UploadComponent implements OnInit {
       uploadDate: new Date().toLocaleDateString(),
       seeders: Math.floor(Math.random() * 100),
       leechers: Math.floor(Math.random() * 50),
-      imageUrl: this.torrentImageUrl,  // Kép URL hozzáadása
+      imageUrl: this.torrentImageUrl, 
       file: this.selectedFile
     };
 
-    // Add torrent to user's list
     currentUser.torrents.push(newTorrent);
 
-    // Update user through UserService to notify all components
     this.userService.login(currentUser);
 
-    // Save new torrent in localStorage under 'uploadedTorrents'
     let torrents = JSON.parse(localStorage.getItem('torrents') || '[]');
     torrents.push(newTorrent);
     localStorage.setItem('torrents', JSON.stringify(torrents));

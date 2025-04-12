@@ -2,8 +2,7 @@
   <nav class="desktop-menu">
     <a mat-button routerLink="/home">Főoldal</a>
     <a mat-button routerLink="/browse">Torrentek</a>
-    
-    <!-- Use direct properties -->
+ 
     <a mat-button *ngIf="!currentUser" routerLink="/login">Bejelentkezés</a>
     <a mat-button *ngIf="!currentUser" routerLink="/registration">Regisztráció</a>
     <a mat-button *ngIf="currentUser" routerLink="/profile">Profilom</a>
@@ -18,7 +17,6 @@
   </button>
 </mat-toolbar>
 
-<!-- Mobile menu -->
 <div id="sidenav" class="sidenav" [ngClass]="{ 'open': isSidenavOpen }">
   <a href="javascript:void(0)" class="closebtn" (click)="closeNav()">×</a>
   <a mat-button routerLink="/home" (click)="closeNav()">Főoldal</a>
@@ -30,6 +28,5 @@
   <a mat-button *ngIf="isAdmin" routerLink="/admin" (click)="closeNav()">ADMIN</a>
 </div>
 
-<!-- Overlay, ami csak akkor jelenik meg, ha a sidenav nyitva van -->
 <div class="overlay" (click)="closeNav()"></div>
 

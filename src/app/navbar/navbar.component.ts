@@ -39,13 +39,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // Initial state
     this.updateUserState(this.userService.currentUserValue);
     
-    // Subscribe to changes
     this.userSub = this.userService.currentUser$.subscribe({
       next: (user) => {
-        console.log('Received user update:', user); // Debug log
+        console.log('Received user update:', user); 
         this.updateUserState(user);
       },
       error: (err) => {
@@ -55,11 +53,10 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   private updateUserState(user: User | null): void {
-    console.log('Updating UI with:', user); // Debug log
+    console.log('Updating UI with:', user);
     this.currentUser = user;
     this.isAdmin = user?.role === 'admin';
     
-    // Triple change detection
     this.cdr.markForCheck();
     this.cdr.detectChanges();
     setTimeout(() => this.cdr.detectChanges(), 0);
@@ -80,7 +77,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    console.log('Logout initiated'); // Debug log
+    console.log('Logout initiated');
     this.userService.logout();
     this.router.navigate(['/login']);
   }

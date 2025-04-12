@@ -5,8 +5,6 @@
     <p><strong>Méret:</strong> {{ torrent.size | formatBytes }}</p>
     <p><strong>Feltöltő:</strong> {{ torrent.uploader }}</p>
     <p><strong>Seederek:</strong> {{ torrent.seeders }} | Leecherek: {{ torrent.leechers }}</p>
-
-    <!-- Kép megjelenítése -->
     <img *ngIf="torrent.imageUrl" [src]="torrent.imageUrl" alt="Torrent Kép" class="torrent-image" />
 
     <div class="buttoncontainer">
