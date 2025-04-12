@@ -1,7 +1,9 @@
 <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="auth-form">
-    <mat-form-field appearance="outline">
+
+    <h2>Bejelentkezés</h2>
+    <mat-form-field appearance="outline" matTooltip="Add meg a regisztrált email címed!">
       <mat-label>Email</mat-label>
-      <input matInput formControlName="email" type="email">
+      <input matInput formControlName="email" type="email" >
     </mat-form-field>
     
     <mat-form-field appearance="outline">

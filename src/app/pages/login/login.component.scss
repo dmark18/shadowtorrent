@@ -1,24 +1,102 @@
 @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
 .auth-form {
+  animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.auth-form {
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+button:hover {
+  background-color: rgb(20, 50, 200);
+  transform: scale(1.05);
+}
+
+.success-snackbar {
+  background-color: #28a745;
+  color: white;
+}
+
+.error-snackbar {
+  background-color: #dc3545;
+  color: white;
+}
+
+.mat-form-field:hover {
+  border-color: #0056b3;
+}
+
+.mat-form-field:hover {
+  border-color: #0056b3;
+}
+
+button {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+button:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
+}
+
+h2{
+  text-align: center;
+  font-family: 'Chakra Petch', sans-serif;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.auth-form {
   display: flex;
   flex-direction: column;
   gap: 16px;
   max-width: 400px;
   margin: auto;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   margin-top: 140px;
   padding: 50px;
   background-color: #061258;
+  background: linear-gradient(25deg, #061258, #062652);
   color: #ffffff;
   font-family: 'Chakra Petch', sans-serif;
+  border-radius: 20px;
+  margin-bottom: 50px;
 
   /* Nested ::ng-deep to scope styles properly */
   ::ng-deep {
+
+    .mat-mdc-form-field:hover {
+      background-color: rgba(255, 255, 255, 0.1); /* Finom színátmenet hoverre */
+      transition: background-color 0.3s ease;
+    }
+    
+    .mat-form-field input:focus {
+      border-color: #0084ff;
+      box-shadow: 0 0 5px rgba(0, 132, 255, 0.8);
+    }
+
     /* Remove hints and subscript wrapper */
     .mat-mdc-form-field-subscript-wrapper,
     .mat-mdc-form-field-hint-wrapper,
     .mat-mdc-form-field-hint-spacer,
     .mat-mdc-form-field-bottom-align {
       display: none !important;
+  
     }
 
     /* Field container styling */
@@ -50,6 +128,8 @@
       left: 16px !important;
       width: calc(100% - 32px) !important;
     }
+
+    
 
     .mdc-floating-label--float-above {
       transform: translateY(-28px) scale(0.75) !important;
@@ -105,6 +185,10 @@
     /* Required asterisk */
     .mat-mdc-form-field-required-marker {
       color: #ff5252 !important;
+    }
+
+    .mat-form-field-appearance-outline .mat-form-field-outline {
+      border: 2px solid rgba(0, 132, 255, 0.7);
     }
   }
 }
