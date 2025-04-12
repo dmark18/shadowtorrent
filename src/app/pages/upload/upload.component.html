@@ -1,0 +1,38 @@
+<div class="upload-form">
+  <!-- Kategória -->
+  <mat-form-field appearance="outline">
+    <mat-label>Torrent Kategória</mat-label>
+    <mat-select [(value)]="selectedCategory">
+      <mat-option *ngFor="let category of categories" [value]="category.name">
+        {{ category.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <!-- Torrent név -->
+  <mat-form-field appearance="outline">
+    <mat-label>Torrent Neve</mat-label>
+    <input matInput [(ngModel)]="torrentName" />
+  </mat-form-field>
+
+  <!-- Kép URL -->
+  <mat-form-field appearance="outline">
+    <mat-label>Torrent Kép URL</mat-label>
+    <input matInput [(ngModel)]="torrentImageUrl" />
+  </mat-form-field>
+
+  <!-- Fájl kiválasztás -->
+  <div class="file-input-container">
+    <label class="file-input-label">
+      <span>{{ selectedFile ? selectedFile.name : 'Nincs fájl kiválasztva' }}</span>
+      <input type="file" (change)="onFileSelected($event)" />
+    </label>
+  </div>
+
+  <!-- Feltöltés gomb -->
+  <mat-label>A fájlméret a feltöltés után lesz meghatározva!</mat-label>
+  <div *ngIf="isBanned" class="banned-message">
+    <p><strong>A fiók ki van tiltva, nem tudsz feltölteni!</strong></p>
+  </div>
+  <button mat-raised-button color="primary" (click)="uploadTorrent()" *ngIf="!isBanned" routerLink="/profile">Feltöltés</button>
+</div>

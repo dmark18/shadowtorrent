@@ -1,0 +1,27 @@
+<div class="torrent-detail">
+  <div *ngIf="torrent">
+    <h2>{{ torrent.name }}</h2>
+    <p><strong>Kategória:</strong> {{ torrent.category }}</p>
+    <p><strong>Méret:</strong> {{ torrent.size | formatBytes }}</p>
+    <p><strong>Feltöltő:</strong> {{ torrent.uploader }}</p>
+    <p><strong>Seederek:</strong> {{ torrent.seeders }} | Leecherek: {{ torrent.leechers }}</p>
+
+    <!-- Kép megjelenítése -->
+    <img *ngIf="torrent.imageUrl" [src]="torrent.imageUrl" alt="Torrent Kép" class="torrent-image" />
+
+    <div class="buttoncontainer">
+      <div class="inner">
+        <button mat-raised-button color="primary" *ngIf="!isBanned">Letöltés</button>
+        <p *ngIf="isBanned" class="banned-message">
+          A fiókod ki van tiltva, nem tudsz letölteni torrenteket.
+        </p>
+      </div>
+    </div>
+
+    <app-comment-section [torrentId]="torrent.id"></app-comment-section>
+  </div>
+
+  <div *ngIf="!torrent">
+    <p>A torrent nem található.</p>
+  </div>
+</div>

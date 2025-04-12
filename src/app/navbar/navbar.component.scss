@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+/* Alapértelmezett beállítások */
+  
+/* Gépi nézet: navbar látszik, mobil navbar és sidenav rejtve */
+.desktop-navbar {
+  display: flex;
+  justify-content: center;
+  background-color: #061258;
+}
+
+.desktop-navbar a {
+  background-color: #061258;
+  color: white;
+  font-size: 15pt;
+  font-family: 'Chakra Petch', sans-serif;
+  text-decoration: none;
+  padding: 10px 15px;
+  font-stretch: expanded;
+  text-transform: uppercase;
+}
+
+.mobile-navbar {
+  display: none;
+}
+
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgb(6, 18, 88);  /* Félátlátszó háttér */
+  overflow-x: hidden;
+  transition: 0.3s;
+  padding-top: 60px;
+  text-align: center;
+  z-index: 9999; /* Biztosítjuk, hogy a sidenav a tartalom fölött legyen */
+}
+
+/* Sidenav nyitva van */
+.sidenav.open {
+  width: 250px; /* Amikor nyitva van */
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 10px;
+  right: 25px;
+  font-size: 36px;
+  color: white;
+  text-decoration: none;
+}
+
+.sidenav a {
+  display: block;
+  color: white;
+  text-decoration: none;
+  font-size: 15pt;
+  font-family: 'Chakra Petch', sans-serif;
+  padding: 10px 0;
+}
+
+/* Kék csík eltüntetése mobilnézetben */
+@media (max-width: 768px) {
+
+  .desktop-navbar {
+    display: none;
+  }
+
+  /* Hamburgermenü és cím elrendezés mobilnézetben */
+  .mobile-navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: transparent;
+    padding: 10px;
+    width: 100%;
+  }
+
+  .mobile-navbar button {
+    position: absolute;
+    left: 10px;  /* Bal oldali margó */
+    top: 10px;   /* Felső margó */
+    color: white; /* Fehér szín */
+  }
+
+  .mobile-navbar .menu-icon {
+    color: white; /* Fehér szín */
+    font-size: 36px;
+  }
+
+  /* A sidenav működése */
+  .sidenav {
+    display: none; /* Alapértelmezés szerint rejtve */
+  }
+
+  /* Sidenav nyitva van */
+  .sidenav.open {
+    display: block;
+    width: 250px; /* Amikor nyitva van */
+  }
+
+  .sidenav .closebtn {
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    font-size: 36px;
+    color: white;
+    text-decoration: none;
+  }
+
+  .sidenav a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    font-size: 15pt;
+    font-family: 'Chakra Petch', sans-serif;
+    padding: 10px 0;
+  }
+
+  /* Az overlay háttér, ami kitakarja a tartalmat */
+  .content-under-sidenav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Átlátszó fekete */
+    z-index: 9998; /* A sidenav alatti réteg */
+    display: none; /* Alapértelmezés szerint rejtve */
+  }
+
+  /* Amikor a sidenav nyitva van, az overlay megjelenik */
+  .sidenav.open + .content-under-sidenav {
+    display: block; /* Megjelenik, ha open */
+  }
+}

@@ -1,0 +1,168 @@
+<div class="admin-container" *ngIf="currentUser && currentUser.role === 'admin'">
+  <h2>Admin Felület</h2>
+
+  <!-- Jóváhagyott torrentek -->
+  <h3>Jóváhagyott Torrentek</h3>
+
+  <!-- Mobilnézet -->
+  <div class="mobile-only">
+    <div class="torrent-card" *ngFor="let torrent of approvedTorrents">
+      <p><strong>Név:</strong> {{ torrent.name }}</p>
+      <p><strong>Kategória:</strong> {{ torrent.category }}</p>
+      <p><strong>Feltöltő:</strong> {{ torrent.uploader }}</p>
+      <p><strong>Méret:</strong> {{ torrent.size }}</p>
+      <p><strong>Állapot:</strong> {{ torrent.status }}</p>
+      <button (click)="deleteTorrent(torrent.id)">Törlés</button>
+    </div>
+  </div>
+
+  <!-- Asztali nézet -->
+  <table class="desktop-only">
+    <thead>
+      <tr>
+        <th>Név</th>
+        <th>Kategória</th>
+        <th>Feltöltő</th>
+        <th>Méret</th>
+        <th>Állapot</th>
+        <th>Műveletek</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let torrent of approvedTorrents">
+        <td>{{ torrent.name }}</td>
+        <td>{{ torrent.category }}</td>
+        <td>{{ torrent.uploader }}</td>
+        <td>{{ torrent.size }}</td>
+        <td>{{ torrent.status }}</td>
+        <td><button (click)="deleteTorrent(torrent.id)">Törlés</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Újonnan feltöltött torrentek -->
+  <h3>Újonnan feltöltött Torrentek</h3>
+
+  <!-- Mobilnézet -->
+  <div class="mobile-only">
+    <div class="torrent-card" *ngFor="let torrent of torrents">
+      <p><strong>Név:</strong> {{ torrent.name }}</p>
+      <p><strong>Kategória:</strong> {{ torrent.category }}</p>
+      <p><strong>Feltöltő:</strong> {{ torrent.uploader }}</p>
+      <p><strong>Méret:</strong> {{ torrent.size }}</p>
+      <p><strong>Állapot:</strong> {{ torrent.status }}</p>
+      <div *ngIf="torrent.status === 'pending'">
+        <button (click)="approveTorrent(torrent.id)">Jóváhagyás</button>
+        <button (click)="rejectTorrent(torrent.id)">Elutasítás</button>
+        <input [(ngModel)]="rejectReason" placeholder="Indok" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Asztali nézet -->
+  <table class="desktop-only">
+    <thead>
+      <tr>
+        <th>Név</th>
+        <th>Kategória</th>
+        <th>Feltöltő</th>
+        <th>Méret</th>
+        <th>Állapot</th>
+        <th>Műveletek</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let torrent of torrents">
+        <td>{{ torrent.name }}</td>
+        <td>{{ torrent.category }}</td>
+        <td>{{ torrent.uploader }}</td>
+        <td>{{ torrent.size }}</td>
+        <td>{{ torrent.status }}</td>
+        <td>
+          <button *ngIf="torrent.status === 'pending'" (click)="approveTorrent(torrent.id)">Jóváhagyás</button>
+          <button *ngIf="torrent.status === 'pending'" (click)="rejectTorrent(torrent.id)">Elutasítás</button>
+          <input *ngIf="torrent.status === 'pending'" [(ngModel)]="rejectReason" placeholder="Indok" />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Elutasított torrentek -->
+  <h3>Elutasított Torrentek</h3>
+
+  <!-- Mobilnézet -->
+  <div class="mobile-only">
+    <div class="torrent-card" *ngFor="let torrent of rejectedTorrents">
+      <p><strong>Név:</strong> {{ torrent.name }}</p>
+      <p><strong>Kategória:</strong> {{ torrent.category }}</p>
+      <p><strong>Feltöltő:</strong> {{ torrent.uploader }}</p>
+      <p><strong>Méret:</strong> {{ torrent.size }}</p>
+      <p><strong>Indok:</strong> {{ torrent.rejectReason }}</p>
+    </div>
+  </div>
+
+  <!-- Asztali nézet -->
+  <table class="desktop-only">
+    <thead>
+      <tr>
+        <th>Név</th>
+        <th>Kategória</th>
+        <th>Feltöltő</th>
+        <th>Méret</th>
+        <th>Indok</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let torrent of rejectedTorrents">
+        <td>{{ torrent.name }}</td>
+        <td>{{ torrent.category }}</td>
+        <td>{{ torrent.uploader }}</td>
+        <td>{{ torrent.size }}</td>
+        <td>{{ torrent.rejectReason }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Felhasználók -->
+  <h3>Felhasználók</h3>
+
+  <!-- Mobilnézet -->
+  <div class="mobile-only">
+    <div class="torrent-card" *ngFor="let user of users; let i = index">
+      <p><strong>Felhasználónév:</strong> {{ user.username }}</p>
+      <p><strong>Email:</strong> {{ user.email }}</p>
+      <p><strong>Kitiltva:</strong> {{ user.banned ? 'Igen' : 'Nem' }}</p>
+      <button (click)="toggleBanUser(i)">
+        {{ user.banned ? 'Feloldás' : 'Kitiltás' }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Asztali nézet -->
+  <table class="desktop-only">
+    <thead>
+      <tr>
+        <th>Felhasználónév</th>
+        <th>Email</th>
+        <th>Kitiltva</th>
+        <th>Műveletek</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of users; let i = index">
+        <td>{{ user.username }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.banned ? 'Igen' : 'Nem' }}</td>
+        <td>
+          <button (click)="toggleBanUser(i)">
+            {{ user.banned ? 'Feloldás' : 'Kitiltás' }}
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="!currentUser || currentUser.role !== 'admin'">
+  <p class="banned-message">Hozzáférés megtagadva. Nem vagy admin.</p>
+</div>

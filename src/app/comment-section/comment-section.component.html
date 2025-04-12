@@ -1,0 +1,19 @@
+<div class="comment-section">
+    <h3>Kommentek</h3>
+  
+    <div *ngFor="let comment of comments" class="comment">
+      <strong>{{ comment.username }}</strong> • 
+      <em>{{ comment.createdAt | date: 'short' }}</em>
+      <p>{{ comment.content }}</p>
+    </div>
+  
+    <div *ngIf="currentUser">
+      <textarea *ngIf="!isBanned" [(ngModel)]="newComment" placeholder="Írd ide a kommentet..."></textarea>
+      <button mat-raised-button color="primary" *ngIf="!isBanned" (click)="addComment()">Küldés</button>
+    </div>
+    <p *ngIf="isBanned" class="banned-message">
+      A fiókod ki van tiltva, nem tudsz hozzászólást küldeni.
+    </p>
+    <p *ngIf="!currentUser">Be kell jelentkezned a hozzászóláshoz.</p>
+  </div>
+  

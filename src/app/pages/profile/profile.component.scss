@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch&display=swap');
+
+.profile-container {
+  max-width: 900px;
+  margin: auto;
+  margin-top: 140px;
+  padding: 50px 20px;
+  background-color: #061258;
+  color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  font-family: 'Chakra Petch', sans-serif;
+  text-align: center;
+}
+
+h2, h3 {
+  color: #ffffff;
+  margin-bottom: 30px;
+}
+
+p {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.banned-message {
+  background-color: #dc3545;
+  color: white;
+  padding: 15px;
+  border-radius: 8px;
+  margin-top: 30px;
+  font-size: 18px;
+}
+
+table.desktop-table {
+  width: 100%;
+  margin-top: 20px;
+  background-color: #05143d;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #0084ff;
+}
+
+th {
+  background-color: #0084ff;
+  color: white;
+}
+
+td {
+  color: white;
+}
+
+button {
+  margin-top: 20px;
+  background-color: rgb(14, 38, 170);
+  color: white;
+  border-radius: 5px;
+  padding: 10px 24px;
+  font-weight: 500;
+  border: none;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+button:hover:not([disabled]) {
+  background-color: rgb(20, 50, 200);
+}
+
+button[disabled] {
+  background-color: rgba(36, 37, 39, 0.5);
+  color: rgb(120, 120, 120);
+  cursor: not-allowed;
+}
+
+.mobile-cards {
+  display: none;
+}
+
+/* Mobil nézet */
+@media (max-width: 768px) {
+  .desktop-table {
+    display: none;
+  }
+
+  .mobile-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .torrent-card {
+    background-color: #05143d;
+    border: 1px solid #0084ff;
+    border-radius: 8px;
+    padding: 16px;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    text-align: left;
+  }
+
+  .torrent-card p {
+    margin: 4px 0;
+  }
+
+  .torrent-card button {
+    margin-top: 12px;
+  }
+
+  .profile-container{
+    margin-top: 25px;
+  }
+}

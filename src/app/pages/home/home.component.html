@@ -1,0 +1,89 @@
+<div class="home-container">
+
+  <!-- 👤 Üdvözlés -->
+  <div *ngIf="currentUser; else guestMessage">
+    <div class="welcome-box">
+      <h2>Üdvözöllek, <span class="username">{{ currentUser.username }}</span>!</h2>
+      <p>Örülünk, hogy újra itt vagy. Keress a torrentek között, vagy nézd meg kiemelt torrentjeinket!</p>
+    </div>
+  </div>
+
+  <ng-template #guestMessage>
+    <div class="welcome-box guest">
+      <h2>Üdvözöllek, Vendég!</h2>
+      <p>A torrentek letöltéséhez be kell jelentkezned!</p>
+    </div>
+  </ng-template>
+
+  <div class="search-container">
+    <mat-form-field appearance="fill" class="search-bar">
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        type="text"
+        placeholder="Torrent keresése..."
+        aria-label="Torrent keresése"
+        matInput
+        [matAutocomplete]="auto"
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="onSearchChange()"
+      />
+      <mat-autocomplete #auto="matAutocomplete">
+        <mat-option *ngFor="let result of filteredTorrents" [value]="result.name" (onSelectionChange)="onSelect(result)">
+          {{ result.name }}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+
+  <!-- 🎯 Legseedeltebb torrentek -->
+  <div class="carousel-container">
+    <h3>Legseedeltebb Torrentek</h3>
+    <div #topCarousel *ngIf="topTorrents.length > 0" class="carousel">
+      <div *ngFor="let torrent of topTorrents" class="carousel-item" (click)="navigateToTorrentDetail(torrent)">
+        <div class="badgeHot">HOT</div>
+        <img [src]="torrent.imageUrl" alt="{{ torrent.name }}" class="carousel-image" />
+        <div class="carousel-info">
+          <h4>{{ torrent.name }}</h4>
+          <p>{{ torrent.category }}</p>
+          <p>Seederek: {{ torrent.seeders }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🆕 Friss feltöltések -->
+  <div class="carousel-container">
+    <h3>Frissen Jóváhagyott</h3>
+    <div #recentCarousel *ngIf="recentTorrents.length > 0" class="carousel">
+      <div *ngFor="let torrent of recentTorrents" class="carousel-item" (click)="navigateToTorrentDetail(torrent)">
+        <div class="badge">ÚJ</div>
+        <img [src]="torrent.imageUrl" alt="{{ torrent.name }}" class="carousel-image" />
+        <div class="carousel-info">
+          <h4>{{ torrent.name }}</h4>
+          <p>{{ torrent.category }}</p>
+          <p>Feltöltő: {{ torrent.uploader }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="carousel-container">
+      <h3>Top Seed/Peer Arányú Torrentek a {{mostCommonCategory}} kategóriából</h3>
+      <div class="carousel" #bestRatioCarousel>
+        <div
+          class="carousel-item"
+          *ngFor="let torrent of bestRatioTorrents"
+          (click)="navigateToTorrentDetail(torrent)"
+        >
+          <img [src]="torrent.imageUrl" alt="{{torrent.name}}" class="carousel-image" />
+          <div class="carousel-info">
+            <h4>{{ torrent.name }}</h4>
+            <p>Seeders: {{ torrent.seeders }} | Leechers: {{ torrent.leechers }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+  
+</div>

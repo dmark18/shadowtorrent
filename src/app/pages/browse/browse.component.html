@@ -1,0 +1,33 @@
+<div class="browse-container">
+  <h2>Torrent böngésző</h2>
+
+  <form [formGroup]="searchForm" (ngSubmit)="applyFilter()" class="filter-form">
+    <input type="text" formControlName="search" placeholder="Keresés torrentek között..." />
+    <select formControlName="category">
+      <option *ngFor="let category of categories" [value]="category.name">
+        {{ category.name }}
+      </option>
+    </select>
+    <button type="submit">Szűrés</button>
+  </form>
+
+  <div class="torrent-list">
+    <div *ngFor="let torrent of filteredTorrents" class="torrent-item">
+      <div class="torrent-image-container">
+        <img [src]="torrent.imageUrl" alt="{{ torrent.name }}" class="torrent-image" />
+      </div>
+      <div class="torrent-info">
+        <h3>
+          <a [routerLink]="['/torrent', torrent.id]" [state]="{ id: torrent.id }">{{ torrent.name }}</a>
+        </h3>
+        <p><strong>Kategória:</strong> {{ torrent.category }}</p>
+        <p><strong>Feltöltő:</strong> {{ torrent.uploader }}</p>
+        <p><strong>Méret:</strong> {{ torrent.size }}</p>
+        <p><strong>Seederek:</strong> {{ torrent.seeders }} | <strong>Leecherek:</strong> {{ torrent.leechers }}</p>
+        <p *ngIf="isBanned" class="banned-message">
+          A fiókod ki van tiltva, nem tudsz letölteni torrenteket.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

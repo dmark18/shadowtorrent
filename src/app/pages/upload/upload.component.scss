@@ -1,0 +1,256 @@
+.upload-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 400px;
+    margin: auto;
+    margin-top: 140px;
+    padding: 50px;
+    background-color: #061258;
+    color: #ffffff;
+    border-radius: 8px;
+  }
+  
+  ::ng-deep {
+    /* Form container */
+    .upload-form {
+      mat-form-field {
+        width: 100%;
+      }
+
+      /* Placeholder styling */
+      .mdc-text-field__input::placeholder {
+        color: rgba(255, 255, 255, 0.7) !important;
+        opacity: 1 !important;
+      }
+  
+      /* Outline border adjustments */
+      .mdc-notched-outline__leading {
+        border-right: none !important;
+        width: 12px !important;
+      }
+  
+      .mdc-notched-outline__trailing {
+        border-left: none !important;
+      }
+  
+      /* Border colors - NORMAL STATE */
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__trailing {
+        border-color: #0084ff !important;
+      }
+  
+      /* HOVER STATE */
+      .mdc-text-field--outlined:not(.mdc-text-field--disabled):hover .mdc-notched-outline__leading,
+      .mdc-text-field--outlined:not(.mdc-text-field--disabled):hover .mdc-notched-outline__trailing {
+        border-color: #0056b3 !important;
+      }
+  
+      /* FOCUS STATE */
+      .mdc-text-field--outlined.mdc-text-field--focused .mdc-notched-outline__leading,
+      .mdc-text-field--outlined.mdc-text-field--focused .mdc-notched-outline__trailing {
+        border-color: #0056b3 !important;
+      }
+  
+      /* ERROR STATE */
+      .mat-mdc-form-field.mat-form-field-invalid .mdc-notched-outline__leading,
+      .mat-mdc-form-field.mat-form-field-invalid .mdc-notched-outline__trailing {
+        border-color: var(--mdc-theme-error, #f44336) !important;
+      }
+  
+      /* Required asterisk */
+      .mat-mdc-form-field-required-marker {
+        color: #ff5252 !important;
+      }
+          
+              /* Label and wrapper styling */
+              .mat-mdc-text-field-wrapper {
+                background-color: #05143d !important;
+              }
+          
+              mat-label {
+                color: #ffffff !important;
+              }
+          
+              /* Remove the vertical notch line */
+              .mdc-notched-outline__notch {
+                border-right: none !important;
+                width: 0 !important;
+                padding-right: 0 !important;
+              }
+          
+              /* Label positioning fixes */
+              .mdc-floating-label {
+                display: block !important;
+                position: absolute !important;
+                left: 16px !important;
+              }
+          
+              .mdc-floating-label--float-above {
+                transform: translateY(-28px) scale(0.75) !important;
+                left: 16px !important;
+              }
+          
+              /* Input field styling */
+              .mdc-text-field__input {
+                color: white !important;
+                caret-color: white !important;
+              }
+    
+    }
+  
+    /* Custom file input styling */
+    .file-input-container {
+      margin-top: 6px;
+      margin-bottom: 1em;
+    }
+  
+    .file-input-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      background-color: #05143d;
+      color: white;
+      border: 1px solid #0084ff;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+  
+      &:hover {
+        background-color: #003b7d;
+      }
+  
+      input[type="file"] {
+        display: none;
+      }
+    }
+  
+    /* ===== MATERIAL OVERRIDES ===== */
+    /* Form field spacing */
+    .mat-mdc-form-field.mat-form-field {
+      margin-top: 1em;
+      margin-bottom: 1em;
+    }
+  
+    /* Input field background */
+    .mat-mdc-text-field-wrapper {
+      background-color: #05143d !important;
+    }
+  
+    /* Form field label */
+    .mat-mdc-form-field-label {
+      color: #ffffff !important;
+    }
+  
+    /* Outline border color */
+    .mat-mdc-outlined-input .mdc-notched-outline__leading,
+    .mat-mdc-outlined-input .mdc-notched-outline__trailing {
+      border-color: #0084ff !important;
+    }
+  
+    /* ===== INPUT TEXT STYLING ===== */
+    /* Main input text color */
+    .mat-mdc-input-element {
+      color: white !important;
+      caret-color: white !important;
+    }
+  
+    /* Placeholder text */
+    .mat-mdc-input-element::placeholder {
+      color: rgba(255, 255, 255, 0.7) !important;
+    }
+  
+    /* ===== SELECT MENU STYLING ===== */
+    /* Closed select display text */
+    .mat-mdc-select-value-text {
+      color: white !important;
+    }
+  
+    /* Select arrow icon */
+    .mat-mdc-select-arrow {
+      color: white !important;
+    }
+  
+    /* Select dropdown panel */
+    .mat-mdc-select-panel {
+      background-color: #05143d !important;
+    }
+  
+    /* Regular option text */
+    .mat-mdc-option {
+      background-color: #05143d !important;
+      
+      .mdc-list-item__primary-text {
+        color: white !important;
+      }
+  
+      &:hover {
+        background-color: #0056b3 !important;
+      }
+    }
+  
+    /* Selected option in dropdown */
+    .mat-mdc-option.mat-selected:not(.mat-option-disabled) {
+      background-color: #0056b3 !important;
+      
+      .mdc-list-item__primary-text {
+        color: white !important;
+      }
+    }
+  
+    /* ===== FILE INPUT DISPLAY ===== */
+    /* Readonly input showing filename */
+    .mat-mdc-form-field-type-mat-input:not(.mat-form-field-disabled) .mat-mdc-input-element[readonly] {
+      color: white !important;
+      cursor: pointer;
+    }
+  
+    /* ===== FOCUS STATES ===== */
+    /* Focused form field */
+    .mdc-text-field--focused {
+      .mat-mdc-form-field-label {
+        color: #0084ff !important;
+      }
+      
+      .mdc-notched-outline__leading,
+      .mdc-notched-outline__trailing {
+        border-color: #0056b3 !important;
+      }
+    }
+  }
+
+  button {
+    margin-top: 20px;
+    background-color: rgb(14, 38, 170) !important;
+    color: white !important;
+    border-radius: 5px;
+    padding: 10px 24px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+  }
+  
+  button:hover:not([disabled]) {
+    background-color: rgb(20, 50, 200) !important;
+  }
+  
+  button[disabled] {
+    background-color: rgba(36, 37, 39, 0.377) !important;
+    color: rgb(120, 120, 120) !important;
+    cursor: not-allowed;
+  }
+
+  .banned-message {
+    background-color: #dc3545;
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 30px;
+    font-size: 18px;
+  }
+
+  @media (max-width: 768px) {
+    .upload-form {
+      margin-top: 25px;
+    }
+  }

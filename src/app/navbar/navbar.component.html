@@ -1,0 +1,35 @@
+<mat-toolbar color="primary" class="desktop-navbar">
+  <nav class="desktop-menu">
+    <a mat-button routerLink="/home">Főoldal</a>
+    <a mat-button routerLink="/browse">Torrentek</a>
+    
+    <!-- Use direct properties -->
+    <a mat-button *ngIf="!currentUser" routerLink="/login">Bejelentkezés</a>
+    <a mat-button *ngIf="!currentUser" routerLink="/registration">Regisztráció</a>
+    <a mat-button *ngIf="currentUser" routerLink="/profile">Profilom</a>
+    <a mat-button *ngIf="currentUser" routerLink="/upload">Feltöltés</a>
+    <a mat-button *ngIf="isAdmin" routerLink="/admin">ADMIN</a>
+  </nav>
+</mat-toolbar>
+
+<mat-toolbar color="primary" class="mobile-navbar">
+  <button mat-icon-button (click)="openNav()">
+    <mat-icon>menu</mat-icon>
+  </button>
+</mat-toolbar>
+
+<!-- Mobile menu -->
+<div id="sidenav" class="sidenav" [ngClass]="{ 'open': isSidenavOpen }">
+  <a href="javascript:void(0)" class="closebtn" (click)="closeNav()">×</a>
+  <a mat-button routerLink="/home" (click)="closeNav()">Főoldal</a>
+  <a mat-button routerLink="/browse" (click)="closeNav()">Torrentek</a>
+  <a mat-button *ngIf="!currentUser" routerLink="/login" (click)="closeNav()">Bejelentkezés</a>
+  <a mat-button *ngIf="!currentUser" routerLink="/registration" (click)="closeNav()">Regisztráció</a>
+  <a mat-button *ngIf="currentUser" routerLink="/profile" (click)="closeNav()">Profilom</a>
+  <a mat-button *ngIf="currentUser" routerLink="/upload" (click)="closeNav()">Feltöltés</a>
+  <a mat-button *ngIf="isAdmin" routerLink="/admin" (click)="closeNav()">ADMIN</a>
+</div>
+
+<!-- Overlay, ami csak akkor jelenik meg, ha a sidenav nyitva van -->
+<div class="overlay" (click)="closeNav()"></div>
+

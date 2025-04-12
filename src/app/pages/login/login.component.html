@@ -1,0 +1,13 @@
+<form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="auth-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email">
+    </mat-form-field>
+    
+    <mat-form-field appearance="outline">
+      <mat-label>Jelszó</mat-label>
+      <input matInput formControlName="password" type="password">
+    </mat-form-field>
+  
+    <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid" routerLink="/profile">Bejelentkezés</button>
+  </form>

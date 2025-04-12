@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+.torrent-detail {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 40px;
+  background-color: #061258;
+  color: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+  font-family: 'Chakra Petch', sans-serif;
+  text-align: center;
+}
+
+h2 {
+  font-size: 32px;
+  margin-bottom: 25px;
+  color: #00c8ff;
+  text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.6);
+}
+
+button {
+  background-color: rgb(14, 38, 170) !important;
+  color: white !important;
+  border-radius: 8px;
+  padding: 12px 28px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+}
+
+.buttoncontainer {
+  height: 70px;
+  position: relative;
+}
+
+.inner {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+button:hover:not([disabled]) {
+  background-color: rgb(20, 50, 200) !important;
+}
+
+button[disabled] {
+  background-color: rgba(36, 37, 39, 0.377) !important;
+  color: rgb(120, 120, 120) !important;
+  cursor: not-allowed;
+}
+
+p {
+  color: #adadad;
+  font-size: 16px;
+  text-align: center;
+}
+
+.banned-message {
+  background-color: #dc3545;
+  color: white;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 30px;
+  font-size: 18px;
+}
+
+.torrent-image {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  border-radius: 10px;
+  margin-top: 25px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.torrent-info {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+}
+
+.torrent-info p {
+  color: #bbb;
+  font-size: 14px;
+  margin: 5px 0;
+}
+
+.torrent-info .torrent-category {
+  font-weight: bold;
+  color: #00c8ff;
+}
+
+.app-comment-section {
+  margin-top: 30px;
+}
+
+@media (max-width: 768px) {
+  .torrent-detail {
+    padding: 20px;
+  }
+
+  h2 {
+    font-size: 26px;
+  }
+
+  .torrent-image {
+    max-width: 100%;
+  }
+
+  .torrent-info {
+    padding: 15px;
+  }
+
+  .buttoncontainer {
+    height: 50px;
+  }
+
+  .banned-message {
+    font-size: 16px;
+  }
+
+  .torrent-info p {
+    font-size: 14px;
+  }
+}

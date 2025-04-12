@@ -1,0 +1,60 @@
+$background: #00020f;
+$elements: #001380;
+$texts: #ffffff;
+$highlight: #66B3FF;
+$links: #3399FF;
+
+@import url('https://fonts.googleapis.com/css2?family=Iceland&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap');
+
+
+
+html{
+    background-color: $background;
+}
+
+button{
+    background-color: $elements;
+    color: $texts;
+    border: 0px;
+}
+
+.sidenav-container {
+    height: 100vh;
+    display: flex;
+  }
+  
+  mat-sidenav {
+    width: 250px;
+    background-color: #061258;
+    color: white;
+  }
+  
+  mat-sidenav-content {
+    padding: 20px;
+    background-color: #0d1b4c;
+    min-height: 100vh;
+  }
+
+h1{
+    color: $texts;
+    text-align: center;
+    font-family: "Iceland", sans-serif;
+    font-weight: bold;
+    font-size: 60pt;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: "Chakra Petch", sans-serif; }
+
+p{
+    color: $texts;
+    text-align: center;
+    font-family: "Chakra Petch", sans-serif;
+}
+
+@media (max-width: 768px) {
+h1{
+    padding-top: 10px;
+    font-size: 35pt;
+}
+  }

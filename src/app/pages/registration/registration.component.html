@@ -1,0 +1,24 @@
+<form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="auth-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Felhasználónév</mat-label>
+      <input matInput formControlName="username">
+    </mat-form-field>
+    
+    <mat-form-field appearance="outline">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" type="email">
+    </mat-form-field>
+    
+    <mat-form-field appearance="outline">
+      <mat-label>Jelszó</mat-label>
+      <input matInput formControlName="password" type="password">
+    </mat-form-field>
+    
+    <mat-form-field appearance="outline">
+      <mat-label>Jelszó megerősítése</mat-label>
+      <input matInput formControlName="confirmPassword" type="password">
+    </mat-form-field>
+  
+    <button mat-raised-button type="submit" [disabled]="registerForm.invalid" class="auth-button">Regisztráció</button>
+  </form>
+  

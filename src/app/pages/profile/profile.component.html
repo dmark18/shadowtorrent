@@ -1,0 +1,100 @@
+<div class="profile-container" *ngIf="currentUser">
+  <h2>Profil</h2>
+  <p><strong>Felhasználónév:</strong> {{ currentUser.username }}</p>
+  <p><strong>Email:</strong> {{ currentUser.email }}</p>
+  <p><strong>Szerepkör:</strong> {{ currentUser.role }}</p>
+
+  <div *ngIf="!currentUser">
+    <p>Nem vagy bejelentkezve.</p>
+    <a routerLink="/login">Jelentkezz be</a>
+  </div>
+
+  <div *ngIf="isBanned" class="banned-message">
+    <p><strong>A fiók ki van tiltva és nem tud fájlokat letölteni!</strong></p>
+  </div>
+
+  <h3>Feltöltött Torrentek</h3>
+
+  <ng-container *ngIf="dataLoaded">
+    <p *ngIf="uploadedTorrents.length === 0">Nincsenek feltöltött torrentjeid.</p>
+
+    <div *ngIf="uploadedTorrents.length > 0">
+      <!-- Asztali táblázat -->
+      <table class="desktop-table">
+        <thead>
+          <tr>
+            <th>Név</th>
+            <th>Kategória</th>
+            <th>Feltöltő</th>
+            <th>Állapot</th>
+            <th>Műveletek</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let torrent of uploadedTorrents">
+            <td>{{ torrent.name }}</td>
+            <td>{{ torrent.category }}</td>
+            <td>{{ torrent.uploader }}</td>
+            <td>{{ torrent.status }}</td>
+            <td><!-- Műveletek --></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Mobil kártyák -->
+      <div class="mobile-cards">
+        <div class="torrent-card" *ngFor="let torrent of uploadedTorrents">
+          <p><strong>Név:</strong> {{ torrent.name }}</p>
+          <p><strong>Kategória:</strong> {{ torrent.category }}</p>
+          <p><strong>Feltöltő:</strong> {{ torrent.uploader }}</p>
+          <p><strong>Állapot:</strong> {{ torrent.status }}</p>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <h3>Elutasított Torrentek</h3>
+
+  <ng-container *ngIf="dataLoaded">
+    <p *ngIf="rejectedTorrents.length === 0">Nincsenek elutasított torrentjeid.</p>
+
+    <div *ngIf="rejectedTorrents.length > 0">
+      <!-- Asztali táblázat -->
+      <table class="desktop-table">
+        <thead>
+          <tr>
+            <th>Név</th>
+            <th>Kategória</th>
+            <th>Feltöltő</th>
+            <th>Indok</th>
+            <th>Műveletek</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let torrent of rejectedTorrents">
+            <td>{{ torrent.name }}</td>
+            <td>{{ torrent.category }}</td>
+            <td>{{ torrent.uploader }}</td>
+            <td>{{ torrent.rejectReason }}</td>
+            <td>
+              <button (click)="deleteRejectedTorrent(torrent.id)">Törlés</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Mobil kártyák -->
+      <div class="mobile-cards">
+        <div class="torrent-card" *ngFor="let torrent of rejectedTorrents">
+          <p><strong>Név:</strong> {{ torrent.name }}</p>
+          <p><strong>Kategória:</strong> {{ torrent.category }}</p>
+          <p><strong>Feltöltő:</strong> {{ torrent.uploader }}</p>
+          <p><strong>Indok:</strong> {{ torrent.rejectReason }}</p>
+          <button (click)="deleteRejectedTorrent(torrent.id)">Törlés</button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <button mat-raised-button (click)="logout()">Kijelentkezés</button>
+</div>
