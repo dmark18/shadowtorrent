@@ -1,27 +1,18 @@
+// src/app/pages/browse/browse.component.ts
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule, Router } from '@angular/router';
-import { Category } from '../../models/category.model'
-
-interface Torrent {
-  id: number;
-  name: string;
-  size: string;
-  category: string;
-  uploader: string;
-  seeders: number;
-  leechers: number;
-  status: string;
-  imageUrl: string;
-}
+import { Category } from '../../models/category.model';
+import { TorrentService } from '../../models/torrent.service';  // TorrentService importálása
+import { Torrent } from '../../models/torrent.model';
 
 @Component({
   selector: 'app-browse',
   templateUrl: './browse.component.html',
-  imports: [CommonModule, ReactiveFormsModule, MatSnackBarModule, RouterModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule, MatSnackBarModule],
   styleUrls: ['./browse.component.scss']
 })
 export class BrowseComponent implements OnInit {
@@ -40,7 +31,7 @@ export class BrowseComponent implements OnInit {
   currentUser: any;
   isBanned: boolean = false;
 
-  constructor(private fb: FormBuilder, private snackBar: MatSnackBar, private router: Router) {
+  constructor(private fb: FormBuilder, private snackBar: MatSnackBar, private router: Router, private torrentService: TorrentService) {
     this.searchForm = this.fb.group({
       search: [''],
       category: ['Minden']
@@ -53,15 +44,14 @@ export class BrowseComponent implements OnInit {
   }
 
   loadTorrents(): void {
-    this.torrents = JSON.parse(localStorage.getItem('torrents') || '[]');
+    this.torrents = this.torrentService.getTorrents();
     this.torrents = this.torrents.filter(torrent => torrent.status === 'approved');
     this.torrents.forEach(torrent => {
       if (!torrent.imageUrl) {
-        torrent.imageUrl = 'https://cdn-icons-png.flaticon.com/512/28/28969.png';  // Az alapértelmezett kép elérési útja
+        torrent.imageUrl = 'https://cdn-icons-png.flaticon.com/512/28/28969.png';  // Alapértelmezett kép
       }
     });
     this.filteredTorrents = [...this.torrents];
-
   }
 
   applyFilter(): void {
@@ -80,7 +70,6 @@ export class BrowseComponent implements OnInit {
       duration: 3000,
       panelClass: ['snackbar-success']
     });
-    
   }
 
   checkUserStatus(): void {

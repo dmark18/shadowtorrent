@@ -1,0 +1,32 @@
+[
+    {
+      "id": 1,
+      "username": "normaluser",
+      "email": "user@example.com",
+      "password": "user123",
+      "banned": false,
+      "role": "user",
+      "torrents": [],
+      "rejectedTorrents": []
+    },
+    {
+      "id": 2,
+      "username": "admin",
+      "email": "admin@example.com",
+      "password": "admin123",
+      "banned": false,
+      "role": "admin",
+      "torrents": [],
+      "rejectedTorrents": []
+    },
+    {
+      "id": 3,
+      "username": "banned",
+      "email": "banned@example.com",
+      "password": "banned123",
+      "banned": true,
+      "role": "user",
+      "torrents": [],
+      "rejectedTorrents": []
+    }
+  ]

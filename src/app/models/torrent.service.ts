@@ -1,22 +1,16 @@
+// src/app/models/torrent.service.ts
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Torrent } from './torrent.model';
+import * as torrentsData from '../assets/torrents.json';  // JSON importálása
 
 @Injectable({
   providedIn: 'root'
 })
 export class TorrentService {
 
-  private apiUrl = 'http://localhost:3000/api/torrents';
+  constructor() {}
 
-  constructor(private http: HttpClient) {}
-
-
-  uploadTorrent(formData: FormData): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/upload`, formData);
-  }
-
-  getUserTorrents(userId: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/user/${userId}`);
+  getTorrents(): Torrent[] {
+    return (torrentsData as any).default;  // JSON adatok visszaadása
   }
 }

@@ -73,9 +73,9 @@
             <td>{{ torrent.category }}</td>
             <td>{{ torrent.uploader }}</td>
             <td>{{ torrent.rejectReason }}</td>
-            <td>
-              <button (click)="deleteRejectedTorrent(torrent.id)">Törlés</button>
-            </td>
+            <!--<td>
+            <button (click)="deleteRejectedTorrent(torrent.id)">Törlés</button> 
+            </td> !-->
           </tr>
         </tbody>
       </table>
@@ -86,7 +86,7 @@
           <p><strong>Kategória:</strong> {{ torrent.category }}</p>
           <p><strong>Feltöltő:</strong> {{ torrent.uploader }}</p>
           <p><strong>Indok:</strong> {{ torrent.rejectReason }}</p>
-          <button (click)="deleteRejectedTorrent(torrent.id)">Törlés</button>
+          <!--<button (click)="deleteRejectedTorrent(torrent.id)">Törlés</button> !-->
         </div>
       </div>
     </div>

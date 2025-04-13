@@ -33,6 +33,7 @@ button {
 .buttoncontainer {
   height: 70px;
   position: relative;
+  margin-top: 20px;
 }
 
 .inner {
@@ -42,6 +43,7 @@ button {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
 
 button:hover:not([disabled]) {
   background-color: rgb(20, 50, 200) !important;

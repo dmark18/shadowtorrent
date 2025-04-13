@@ -4,7 +4,7 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
-  ViewChild
+  ViewChild, ViewEncapsulation
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from '../../models/user.model';
@@ -14,21 +14,10 @@ import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { Observable, startWith, map } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
+import { TorrentService } from '../../models/torrent.service'; 
+import { Torrent } from '../../models/torrent.model'
 
-interface Torrent {
-  id: number;
-  name: string;
-  size: string;
-  category: string;
-  uploader: string;
-  seeders: number;
-  leechers: number;
-  status: string;
-  imageUrl: string;
-  downloadCount: number;
-}
 
 @Component({
   selector: 'app-home',
@@ -43,7 +32,8 @@ interface Torrent {
     MatIconModule
   ],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   currentUser: User | null = null;
@@ -54,7 +44,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   mostCommonCategory: string = '';
 
   searchControl = new FormControl('');
-  filteredTorrents$!: Observable<Torrent[]>;
+  filteredTorrents: Torrent[] = [];
 
   @ViewChild('topCarousel') topCarousel!: ElementRef;
   @ViewChild('recentCarousel') recentCarousel!: ElementRef;
@@ -64,15 +54,18 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   private recentScrollInterval: any;
   private bestRatioScrollInterval: any;
 
-  constructor(private userService: UserService, private router: Router) {}
+  constructor(
+    private userService: UserService,
+    private torrentService: TorrentService,  // TorrentService injektálása
+    private router: Router
+  ) {}
 
   searchTerm: string = '';
-  filteredTorrents: Torrent[] = [];
 
   onSearchChange(): void {
     const term = this.searchTerm.toLowerCase();
     this.filteredTorrents = term
-      ? this.getAllTorrents().filter(t => t.name.toLowerCase().includes(term))
+      ? this.allTorrents.filter(t => t.name.toLowerCase().includes(term))
       : [];
   }
 
@@ -80,40 +73,36 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.router.navigate(['/torrent', torrent.id]);
   }
 
-  private getAllTorrents(): Torrent[] {
-    return JSON.parse(localStorage.getItem('torrents') || '[]');
-  }
-
   ngOnInit(): void {
     this.currentUser = this.userService.currentUserValue;
-    const torrents: Torrent[] = JSON.parse(localStorage.getItem('torrents') || '[]');
-    this.allTorrents = torrents;
 
-    torrents.forEach(torrent => {
+    // Torrentek lekérése a TorrentService-ből (szinkron módon)
+    this.allTorrents = this.torrentService.getTorrents();
+
+    // Képurlapok beállítása, ha nincs beállítva
+    this.allTorrents.forEach(torrent => {
       if (!torrent.imageUrl) {
         torrent.imageUrl = 'https://cdn-icons-png.flaticon.com/512/28/28969.png';
       }
     });
 
-    this.topTorrents = [...torrents]
-      .sort((a, b) => b.seeders - a.seeders)
-      .slice(0, 5);
+    // Top torrentek (seederek szerint rendezve)
+    this.topTorrents = [...this.allTorrents].sort((a, b) => b.seeders - a.seeders).slice(0, 5);
 
-    this.recentTorrents = [...torrents]
-      .sort((a, b) => b.id - a.id)
-      .slice(0, 5);
+    // Legújabb torrentek
+    this.recentTorrents = [...this.allTorrents].sort((a, b) => b.id - a.id).slice(0, 5);
 
-
+    // Leggyakoribb kategória meghatározása
     const categoryCount: { [key: string]: number } = {};
-    torrents.forEach(t => {
+    this.allTorrents.forEach(t => {
       categoryCount[t.category] = (categoryCount[t.category] || 0) + 1;
     });
-
     this.mostCommonCategory = Object.keys(categoryCount).reduce((a, b) =>
       categoryCount[a] > categoryCount[b] ? a : b
     );
 
-    this.bestRatioTorrents = torrents
+    // Legjobb seed/leech arányú torrentek
+    this.bestRatioTorrents = this.allTorrents
       .filter(t => t.category === this.mostCommonCategory && t.leechers > 0)
       .map(t => ({
         ...t,
@@ -121,19 +110,10 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       }))
       .sort((a, b) => b.ratio - a.ratio)
       .slice(0, 5)
-      .map(({ ratio, ...rest }) => rest); 
+      .map(({ ratio, ...rest }) => rest);
 
-    this.filteredTorrents$ = this.searchControl.valueChanges.pipe(
-      startWith(''),
-      map(value => this.filterTorrents(value || ''))
-    );
-  }
-
-  private filterTorrents(value: string): Torrent[] {
-    const filterValue = value.toLowerCase();
-    return this.allTorrents.filter(torrent =>
-      torrent.name.toLowerCase().includes(filterValue)
-    );
+    // Keresés szűrés
+    this.filteredTorrents = this.allTorrents;
   }
 
   ngAfterViewInit(): void {

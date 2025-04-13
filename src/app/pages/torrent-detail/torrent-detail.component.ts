@@ -1,3 +1,4 @@
+// src/app/pages/torrent-detail/torrent-detail.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -5,18 +6,8 @@ import { CommentSectionComponent } from '../../comment-section/comment-section.c
 import { FormatBytesPipe } from '../../pipes/format-bytes.pipe';
 import { User } from '../../models/user.model';
 import { UserService } from '../../models/user.service';
-
-interface Torrent {
-  id: number;
-  name: string;
-  size: string;
-  category: string;
-  uploader: string;
-  seeders: number;
-  leechers: number;
-  status: string;
-  imageUrl: string;
-}
+import { TorrentService } from '../../models/torrent.service'; // TorrentService importálása
+import { Torrent } from '../../models/torrent.model';  // Torrent model importálása
 
 @Component({
   selector: 'app-torrent-detail',
@@ -34,7 +25,8 @@ export class TorrentDetailComponent implements OnInit {
   constructor(
     private userService: UserService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private torrentService: TorrentService // TorrentService injektálása
   ) {}
 
   ngOnInit(): void {
@@ -55,7 +47,8 @@ export class TorrentDetailComponent implements OnInit {
       return;
     }
 
-    const torrents: Torrent[] = JSON.parse(localStorage.getItem('torrents') || '[]');
+    // A torrentek betöltése a TorrentService-ből
+    const torrents: Torrent[] = this.torrentService.getTorrents();
     const found = torrents.find(t => t.id === this.torrentId);
 
     if (!found) {

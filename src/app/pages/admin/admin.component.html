@@ -11,7 +11,7 @@
       <p><strong>Feltöltő:</strong> {{ torrent.uploader }}</p>
       <p><strong>Méret:</strong> {{ torrent.size }}</p>
       <p><strong>Állapot:</strong> {{ torrent.status }}</p>
-      <button (click)="deleteTorrent(torrent.id)">Törlés</button>
+      <!--<button (click)="deleteTorrent(torrent.id)">Törlés</button>!-->
     </div>
   </div>
 
@@ -33,7 +33,7 @@
         <td>{{ torrent.uploader }}</td>
         <td>{{ torrent.size }}</td>
         <td>{{ torrent.status }}</td>
-        <td><button (click)="deleteTorrent(torrent.id)">Törlés</button></td>
+        <!--<td><button (click)="deleteTorrent(torrent.id)">Törlés</button></td>!-->
       </tr>
     </tbody>
   </table>
@@ -50,9 +50,9 @@
       <p><strong>Méret:</strong> {{ torrent.size }}</p>
       <p><strong>Állapot:</strong> {{ torrent.status }}</p>
       <div *ngIf="torrent.status === 'pending'">
-        <button (click)="approveTorrent(torrent.id)">Jóváhagyás</button>
+        <!--<button (click)="approveTorrent(torrent.id)">Jóváhagyás</button>
         <button (click)="rejectTorrent(torrent.id)">Elutasítás</button>
-        <input [(ngModel)]="rejectReason" placeholder="Indok" />
+        <input [(ngModel)]="rejectReason" placeholder="Indok" />-->
       </div>
     </div>
   </div>
@@ -75,11 +75,13 @@
         <td>{{ torrent.uploader }}</td>
         <td>{{ torrent.size }}</td>
         <td>{{ torrent.status }}</td>
+        <!--
         <td>
           <button *ngIf="torrent.status === 'pending'" (click)="approveTorrent(torrent.id)">Jóváhagyás</button>
           <button *ngIf="torrent.status === 'pending'" (click)="rejectTorrent(torrent.id)">Elutasítás</button>
           <input *ngIf="torrent.status === 'pending'" [(ngModel)]="rejectReason" placeholder="Indok" />
         </td>
+        !-->
       </tr>
     </tbody>
   </table>

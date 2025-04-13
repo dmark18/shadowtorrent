@@ -6,6 +6,7 @@ import { User } from '../../models/user.model';
 import { Torrent } from '../../models/torrent.model';
 import { UserService } from '../../models/user.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TorrentService } from '../../models/torrent.service'
 
 @Component({
   selector: 'app-admin',
@@ -23,28 +24,29 @@ export class AdminComponent implements OnInit {
   rejectReason: string = '';
   users: User[] = [];
 
-  constructor(private router: Router, private userService: UserService, private snackBar: MatSnackBar) {}
+  constructor(private router: Router, private userService: UserService, private snackBar: MatSnackBar, private torrentService: TorrentService) {}
 
   ngOnInit() {
     this.loadTorrents();
     this.loadUsers();
     this.currentUser = this.userService.currentUserValue;
-
   }
 
+  // Torrentek betöltése localStorage-ból
   loadTorrents() {
-    const allTorrents = JSON.parse(localStorage.getItem('torrents') || '[]');
-    this.torrents = allTorrents.filter((t: Torrent) => t.status === 'pending');
-    this.approvedTorrents = allTorrents.filter((t: Torrent) => t.status === 'approved');
-    this.rejectedTorrents = allTorrents.filter((t: Torrent) => t.status === 'rejected');
+    const allTorrents = this.torrentService.getTorrents();
+    this.torrents = allTorrents.filter(t => t.status === 'pending');
+    this.approvedTorrents = allTorrents.filter(t => t.status === 'approved');
+    this.rejectedTorrents = allTorrents.filter(t => t.status === 'rejected');
   }
-  
 
+  // Felhasználók betöltése localStorage-ból (nem módosítva)
   loadUsers() {
     const users = JSON.parse(localStorage.getItem('users') || '[]');
     this.users = users;
   }
 
+  // Torrent jóváhagyása
   approveTorrent(torrentId: number) {
     let torrents = JSON.parse(localStorage.getItem('torrents') || '[]');
     const index = torrents.findIndex((t: Torrent) => t.id === torrentId);
@@ -55,8 +57,8 @@ export class AdminComponent implements OnInit {
       this.snackBar.open('Torrent jóváhagyva!', 'Bezár', { duration: 2000 });
     }
   }
-  
 
+  // Torrent elutasítása
   rejectTorrent(torrentId: number) {
     let torrents = JSON.parse(localStorage.getItem('torrents') || '[]');
     const index = torrents.findIndex((t: Torrent) => t.id === torrentId);
@@ -68,8 +70,8 @@ export class AdminComponent implements OnInit {
       this.snackBar.open('Torrent elutasítva!', 'Bezár', { duration: 2000 });
     }
   }
-  
 
+  // Torrent törlése
   deleteTorrent(torrentId: number) {
     let torrents = JSON.parse(localStorage.getItem('torrents') || '[]');
     torrents = torrents.filter((t: Torrent) => t.id !== torrentId);
@@ -77,12 +79,11 @@ export class AdminComponent implements OnInit {
     this.loadTorrents();
     this.snackBar.open('Torrent törölve!', 'Bezár', { duration: 2000 });
   }
-  
 
+  // Felhasználó tiltásának kezelése
   toggleBanUser(index: number) {
     this.users[index].banned = !this.users[index].banned;
     localStorage.setItem('users', JSON.stringify(this.users));
-  
 
     const currentUser = this.userService.currentUserValue;
     if (currentUser && currentUser.id === this.users[index].id) {

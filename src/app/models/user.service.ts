@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { User } from './user.model';
+import * as usersData from '../assets/users.json';  // JSON importálása
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,11 @@ export class UserService {
       console.error('Error parsing user data:', e);
       return null;
     }
+  }
+
+  // A felhasználók listájának lekérése közvetlenül a JSON fájlból
+  getAllUsersFromFile(): User[] {
+    return (usersData as any).default ?? [];  // JSON adat visszaadása
   }
 
   login(user: User): void {
@@ -53,11 +59,9 @@ export class UserService {
       users[userIndex].rejectedTorrents = rejectedTorrents;
       localStorage.setItem('users', JSON.stringify(users));
   
-      
       if (this.currentUserValue?.id === userId) {
         this.currentUserSubject.next(users[userIndex]);
       }
     }
   }
-  
 }
