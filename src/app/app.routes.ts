@@ -6,13 +6,14 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { UploadComponent } from './pages/upload/upload.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/registration/registration.component';
-import { TorrentDetailComponent } from './pages/torrent-detail/torrent-detail.component'
+import { TorrentDetailComponent } from './pages/torrent-detail/torrent-detail.component';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
 {path: 'home', component: HomeComponent},
 {path: 'browse', component: BrowseComponent},
-{path: 'profile', component:ProfileComponent},
-{ path: 'admin', component: AdminComponent},
+{path: 'profile', component:ProfileComponent, canActivate: [AuthGuard]},
+{ path: 'admin', component: AdminComponent, canActivate: [AuthGuard]},
 {path: 'upload', component:UploadComponent},
 {path: 'login', component:LoginComponent},
 {path: 'registration', component:RegisterComponent},

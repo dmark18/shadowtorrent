@@ -4,6 +4,8 @@
     <mat-form-field appearance="outline" matTooltip="Add meg a regisztrált email címed!">
       <mat-label>Email</mat-label>
       <input matInput formControlName="email" type="email" >
+        <mat-error *ngIf="email?.hasError('required')">Az email kötelező!</mat-error>
+  <mat-error *ngIf="email?.hasError('email')">Érvénytelen email formátum!</mat-error>
     </mat-form-field>
     
     <mat-form-field appearance="outline">
@@ -11,5 +13,5 @@
       <input matInput formControlName="password" type="password">
     </mat-form-field>
   
-    <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid" routerLink="/profile">Bejelentkezés</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">Bejelentkezés</button>
   </form>

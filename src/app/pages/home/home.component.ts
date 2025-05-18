@@ -4,20 +4,20 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
-  ViewChild, ViewEncapsulation
+  ViewChild,
+  ViewEncapsulation
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { User } from '../../models/user.model';
-import { UserService } from '../../models/user.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { TorrentService } from '../../models/torrent.service'; 
-import { Torrent } from '../../models/torrent.model'
 
+import { TorrentService } from '../../services/torrent.service';
+import { Torrent } from '../../models/torrent.model';
+import { AuthService } from '../../services/user.service'; // AuthService-ként működik most
 
 @Component({
   selector: 'app-home',
@@ -36,7 +36,7 @@ import { Torrent } from '../../models/torrent.model'
   encapsulation: ViewEncapsulation.None
 })
 export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
-  currentUser: User | null = null;
+  currentUser: any = null;
   topTorrents: Torrent[] = [];
   recentTorrents: Torrent[] = [];
   allTorrents: Torrent[] = [];
@@ -55,8 +55,8 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   private bestRatioScrollInterval: any;
 
   constructor(
-    private userService: UserService,
-    private torrentService: TorrentService,  // TorrentService injektálása
+    private authService: AuthService,
+    private torrentService: TorrentService,
     private router: Router
   ) {}
 
@@ -74,47 +74,71 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.currentUser = this.userService.currentUserValue;
+  // Betöltjük a felhasználói profilt
+  this.authService.getUserProfile().subscribe(profile => {
+    if (profile) {
+      this.currentUser = profile;
+      console.log('Felhasználói profil:', profile);
+    }
+  });
 
-    // Torrentek lekérése a TorrentService-ből (szinkron módon)
-    this.allTorrents = this.torrentService.getTorrents();
+  // Betöltjük az összes torrentet
+  this.torrentService.getTorrents().subscribe(torrents => {
+    this.allTorrents = torrents;
 
-    // Képurlapok beállítása, ha nincs beállítva
+    // Alapértelmezett kép beállítása, ha nincs
     this.allTorrents.forEach(torrent => {
       if (!torrent.imageUrl) {
         torrent.imageUrl = 'https://cdn-icons-png.flaticon.com/512/28/28969.png';
       }
     });
 
-    // Top torrentek (seederek szerint rendezve)
-    this.topTorrents = [...this.allTorrents].sort((a, b) => b.seeders - a.seeders).slice(0, 5);
+    // Top 5 legtöbb seeder alapján
+    this.topTorrents = [...this.allTorrents]
+      .sort((a, b) => b.seeders - a.seeders)
+      .slice(0, 5);
 
-    // Legújabb torrentek
-    this.recentTorrents = [...this.allTorrents].sort((a, b) => b.id - a.id).slice(0, 5);
+    // Legfrissebb 5 torrent ID alapján
+    this.recentTorrents = [...this.allTorrents]
+      .sort((a, b) => b.id - a.id)
+      .slice(0, 5);
 
-    // Leggyakoribb kategória meghatározása
+    // Kategóriák számlálása
     const categoryCount: { [key: string]: number } = {};
     this.allTorrents.forEach(t => {
-      categoryCount[t.category] = (categoryCount[t.category] || 0) + 1;
+      if (t.category) {
+        categoryCount[t.category] = (categoryCount[t.category] || 0) + 1;
+      }
     });
-    this.mostCommonCategory = Object.keys(categoryCount).reduce((a, b) =>
-      categoryCount[a] > categoryCount[b] ? a : b
-    );
 
-    // Legjobb seed/leech arányú torrentek
+    // Leggyakoribb kategória kiválasztása, ha van
+    const categories = Object.keys(categoryCount);
+    if (categories.length > 0) {
+      this.mostCommonCategory = categories.reduce((a, b) =>
+        categoryCount[a] > categoryCount[b] ? a : b
+      );
+    } else {
+      this.mostCommonCategory = 'Nincs adat';
+    }
+
+    // Legjobb arányú (seeders/leechers) torrentek a leggyakoribb kategóriában
     this.bestRatioTorrents = this.allTorrents
-      .filter(t => t.category === this.mostCommonCategory && t.leechers > 0)
+      .filter(t =>
+        t.category === this.mostCommonCategory &&
+        t.leechers > 0
+      )
       .map(t => ({
         ...t,
         ratio: t.seeders / t.leechers
       }))
       .sort((a, b) => b.ratio - a.ratio)
       .slice(0, 5)
-      .map(({ ratio, ...rest }) => rest);
+      .map(({ ratio, ...rest }) => rest); // Ratio eltávolítása, ha nem kell
 
-    // Keresés szűrés
+    // Alapértelmezett lista szűréshez
     this.filteredTorrents = this.allTorrents;
-  }
+  });
+}
 
   ngAfterViewInit(): void {
     this.startAutoScroll(this.topCarousel, 'topScrollInterval');
@@ -132,7 +156,10 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.router.navigate(['/torrent', torrent.id]);
   }
 
-  private startAutoScroll(ref: ElementRef, intervalKey: 'topScrollInterval' | 'recentScrollInterval' | 'bestRatioScrollInterval') {
+  private startAutoScroll(
+    ref: ElementRef,
+    intervalKey: 'topScrollInterval' | 'recentScrollInterval' | 'bestRatioScrollInterval'
+  ) {
     const el = ref?.nativeElement;
     const scrollAmount = 250;
 

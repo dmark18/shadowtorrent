@@ -2,20 +2,21 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { User } from '../../models/user.model';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { AuthService } from '../../services/user.service';
 
 @Component({
   selector: 'app-register',
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.scss'],
+  standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule, 
+    ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule
@@ -24,37 +25,42 @@ import { MatButtonModule } from '@angular/material/button';
 export class RegisterComponent {
   registerForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private router: Router, private snackBar: MatSnackBar) {
+  constructor(
+    private fb: FormBuilder,
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private authServ: AuthService
+  ) {
     this.registerForm = this.fb.group({
-      username: ['', [Validators.required]],
+      username: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]]
-    });
+    }, { validators: this.passwordMatchValidator });
+  }
+
+  passwordMatchValidator(form: FormGroup): null | object {
+    const password = form.get('password')?.value;
+    const confirmPassword = form.get('confirmPassword')?.value;
+    return password === confirmPassword ? null : { mismatch: true };
   }
 
   onRegister(): void {
-    if (this.registerForm.valid) {
-      const users: User[] = JSON.parse(localStorage.getItem('users') || '[]');
-      if (users.some(u => u.email === this.registerForm.value.email)) {
-        this.snackBar.open('Ez az e-mail már regisztrálva van!', 'Bezár', { duration: 2000 });
-        return;
-      }
-      const newUser: User = {
-        id: users.length ? Math.max(...users.map(u => u.id)) + 1 : 1,
-        username: this.registerForm.value.username,
-        email: this.registerForm.value.email,
-        password: this.registerForm.value.password,
-        banned: false,
-        role: 'user',
-        rejectedTorrents: [],
-        torrents: []
-        
-      };
-      users.push(newUser);
-      localStorage.setItem('users', JSON.stringify(users));
-      this.snackBar.open('Sikeres regisztráció!', 'Bezár', { duration: 2000 });
-      this.router.navigate(['/login']);
+    if (this.registerForm.invalid) {
+      this.snackBar.open('Kérjük töltsd ki helyesen a mezőket!', 'Bezár', { duration: 2000 });
+      return;
     }
+
+    const { email, password, username } = this.registerForm.value;
+
+    this.authServ.signUp(email, password, username)
+      .then(() => {
+        this.snackBar.open('Sikeres regisztráció!', 'Bezár', { duration: 2000 });
+        this.registerForm.reset();
+        this.router.navigate(['/profile']);
+      })
+      .catch((error) => {
+        this.snackBar.open(`Hiba: ${error.message}`, 'Bezár', { duration: 3000 });
+      });
   }
 }

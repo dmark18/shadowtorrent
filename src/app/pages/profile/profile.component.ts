@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
-import { User } from '../../models/user.model';
-import { UserService } from '../../models/user.service';
 import { CommonModule } from '@angular/common';
-import { Torrent } from '../../models/torrent.model';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { TorrentService } from '../../models/torrent.service'; // Added TorrentService import
+import { Subscription } from 'rxjs';
+
+import { AuthService } from '../../services/user.service';
+import { TorrentService } from '../../services/torrent.service';
+import { Torrent } from '../../models/torrent.model';
 
 @Component({
   selector: 'app-profile',
@@ -13,52 +14,57 @@ import { TorrentService } from '../../models/torrent.service'; // Added TorrentS
   imports: [CommonModule],
   styleUrls: ['./profile.component.scss']
 })
-export class ProfileComponent implements OnInit {
-  currentUser: User | null = null;
+export class ProfileComponent implements OnInit, OnDestroy {
+  currentUser: any = null;
   isBanned: boolean = false;
   rejectedTorrents: Torrent[] = [];
   uploadedTorrents: Torrent[] = [];
   dataLoaded = false;
 
+  private userSubscription?: Subscription;
+  private torrentSubscription?: Subscription;
+
   constructor(
     private router: Router,
-    private userService: UserService,
+    private authService: AuthService,
     private snackBar: MatSnackBar,
-    private torrentService: TorrentService  // Added TorrentService to load torrents
+    private torrentService: TorrentService
   ) {}
 
   ngOnInit() {
-  this.currentUser = this.userService.currentUserValue;
+    this.userSubscription = this.authService.getUserProfile().subscribe(user => {
+      if (!user) {
+        this.router.navigate(['/login']);
+        return;
+      }
 
-  if (!this.currentUser) {
-    this.router.navigate(['/login']);
-    return;
+      this.currentUser = user;
+      this.isBanned = user.banned ?? false;
+
+      this.torrentSubscription = this.torrentService.getTorrents().subscribe(torrents => {
+        this.uploadedTorrents = torrents.filter(torrent =>
+          torrent.uploader === this.currentUser.username &&
+          (torrent.status === 'pending' || torrent.status === 'approved')
+        );
+
+        this.rejectedTorrents = torrents.filter(torrent =>
+          torrent.uploader === this.currentUser.username &&
+          torrent.status === 'rejected'
+        );
+
+        this.dataLoaded = true;
+      });
+    });
   }
 
-  this.isBanned = this.currentUser.banned ?? false;
-
-  // Load torrents directly from the TorrentService as an array
-  const torrents: Torrent[] = this.torrentService.getTorrents();
-
-  // Filter the uploaded torrents (those by the current user) and their status
-  this.uploadedTorrents = torrents.filter((torrent: Torrent) =>
-    torrent.uploader === this.currentUser?.username &&
-    (torrent.status === 'pending' || torrent.status === 'approved')
-  );
-
-  // Filter the rejected torrents (those by the current user with rejected status)
-  this.rejectedTorrents = torrents.filter((torrent: Torrent) =>
-    torrent.uploader === this.currentUser?.username && torrent.status === 'rejected'
-  );
-
-  this.dataLoaded = true;
-}
-
+  ngOnDestroy() {
+    this.userSubscription?.unsubscribe();
+    this.torrentSubscription?.unsubscribe();
+  }
 
   logout() {
-    this.userService.logout();
-    this.router.navigate(['/login']).then(() => {
-      window.location.reload();
+    this.authService.signOut().then(() => {
+      this.router.navigate(['/login']);
     });
   }
 
@@ -68,7 +74,37 @@ export class ProfileComponent implements OnInit {
         this.currentUser.torrents = [];
       }
       this.currentUser.torrents.push(newTorrent);
-      this.userService.login(this.currentUser);
     }
   }
+
+  deleteRejectedTorrent(torrentId: string) {
+  this.torrentService.deleteTorrent(torrentId)
+    .then(() => {
+      this.snackBar.open('Elutasított torrent törölve!', 'Bezár', { duration: 2000 });
+
+      // Újratöltjük a torrenteket a komponensben
+      if (this.torrentSubscription) {
+        this.torrentSubscription.unsubscribe();
+      }
+
+      this.torrentSubscription = this.torrentService.getTorrents().subscribe(torrents => {
+        this.uploadedTorrents = torrents.filter(torrent =>
+          torrent.uploader === this.currentUser.username &&
+          (torrent.status === 'pending' || torrent.status === 'approved')
+        );
+
+        this.rejectedTorrents = torrents.filter(torrent =>
+          torrent.uploader === this.currentUser.username &&
+          torrent.status === 'rejected'
+        );
+
+        this.dataLoaded = true;
+      });
+    })
+    .catch(err => {
+      this.snackBar.open('Hiba történt a törlés során.', 'Bezár', { duration: 2000 });
+      console.error('Torrent törlés hiba:', err);
+    });
+}
+
 }

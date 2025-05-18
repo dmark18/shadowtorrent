@@ -76,3 +76,17 @@ p {
   margin-top: 30px;
   font-size: 18px;
 }
+
+.role-admin {
+  color: red;
+  font-weight: bold;
+}
+
+.role-banned {
+  color: #555555; /* sötétszürke */
+  font-style: italic;
+}
+
+.role-user {
+  color: inherit; /* alapértelmezett szín */
+}

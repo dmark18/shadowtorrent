@@ -7,9 +7,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { UserService } from '../models/user.service';
+import { AuthService } from '../services/user.service';
 import { Subscription } from 'rxjs';
-import { User } from '../models/user.model';
 
 @Component({
   selector: 'app-navbar',
@@ -28,44 +27,37 @@ import { User } from '../models/user.model';
 })
 export class NavbarComponent implements OnInit, OnDestroy {
   isSidenavOpen = false;
-  currentUser: User | null = null;
+  currentUser: any = null;
   isAdmin = false;
   private userSub!: Subscription;
 
   constructor(
-    public userService: UserService,
+    public authService: AuthService,
     private router: Router,
     private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.updateUserState(this.userService.currentUserValue);
-    
-    this.userSub = this.userService.currentUser$.subscribe({
-      next: (user) => {
-        console.log('Received user update:', user); 
-        this.updateUserState(user);
+    this.userSub = this.authService.getUserProfile().subscribe({
+      next: (profile) => {
+        console.log('Received user profile:', profile);
+        this.updateUserState(profile);
       },
       error: (err) => {
-        console.error('User subscription error:', err);
+        console.error('User profile subscription error:', err);
       }
     });
   }
 
-  private updateUserState(user: User | null): void {
-    console.log('Updating UI with:', user);
-    this.currentUser = user;
-    this.isAdmin = user?.role === 'admin';
-    
-    this.cdr.markForCheck();
+  private updateUserState(profile: any): void {
+    this.currentUser = profile;
+    this.isAdmin = profile?.role === 'admin';
+
     this.cdr.detectChanges();
-    setTimeout(() => this.cdr.detectChanges(), 0);
   }
 
   ngOnDestroy(): void {
-    if (this.userSub) {
-      this.userSub.unsubscribe();
-    }
+    this.userSub?.unsubscribe();
   }
 
   openNav(): void {
@@ -77,8 +69,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
   }
 
   logout(): void {
-    console.log('Logout initiated');
-    this.userService.logout();
-    this.router.navigate(['/login']);
+    this.authService.signOut();
   }
 }

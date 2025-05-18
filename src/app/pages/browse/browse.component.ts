@@ -6,7 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule, Router } from '@angular/router';
 import { Category } from '../../models/category.model';
-import { TorrentService } from '../../models/torrent.service';  // TorrentService importálása
+import { TorrentService } from '../../services/torrent.service';  
 import { Torrent } from '../../models/torrent.model';
 
 @Component({
@@ -43,16 +43,17 @@ export class BrowseComponent implements OnInit {
     this.applyFilter();
   }
 
-  loadTorrents(): void {
-    this.torrents = this.torrentService.getTorrents();
-    this.torrents = this.torrents.filter(torrent => torrent.status === 'approved');
+loadTorrents(): void {
+  this.torrentService.getTorrents().subscribe(torrents => {
+    this.torrents = torrents.filter(torrent => torrent.status === 'approved');
     this.torrents.forEach(torrent => {
       if (!torrent.imageUrl) {
-        torrent.imageUrl = 'https://cdn-icons-png.flaticon.com/512/28/28969.png';  // Alapértelmezett kép
+        torrent.imageUrl = 'https://cdn-icons-png.flaticon.com/512/28/28969.png';  
       }
     });
     this.filteredTorrents = [...this.torrents];
-  }
+  });
+}
 
   applyFilter(): void {
     const searchText = this.searchForm.value.search.toLowerCase();

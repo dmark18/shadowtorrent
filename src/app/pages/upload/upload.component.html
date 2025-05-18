@@ -18,16 +18,16 @@
     <input matInput [(ngModel)]="torrentImageUrl" />
   </mat-form-field>
 
-  <div class="file-input-container">
-    <label class="file-input-label">
-      <span>{{ selectedFile ? selectedFile.name : 'Nincs fájl kiválasztva' }}</span>
-      <input type="file" (change)="onFileSelected($event)" />
-    </label>
-  </div>
+  <mat-form-field appearance="outline">
+    <mat-label>Torrent Fájl URL</mat-label>
+    <input matInput [(ngModel)]="torrentFileUrl" />
+  </mat-form-field>
 
   <mat-label>A fájlméret a feltöltés után lesz meghatározva!</mat-label>
+
   <div *ngIf="isBanned" class="banned-message">
     <p><strong>A fiók ki van tiltva, nem tudsz feltölteni!</strong></p>
   </div>
+
   <button mat-raised-button color="primary" (click)="uploadTorrent()" *ngIf="!isBanned" routerLink="/profile">Feltöltés</button>
 </div>

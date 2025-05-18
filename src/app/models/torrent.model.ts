@@ -8,7 +8,7 @@ export interface Torrent {
   uploadDate: string;
   seeders: number;
   leechers: number;
-  file: File | null;
+  fileUrl: string;
   rejectReason?: string;
   imageUrl?: string | 'https://cdn-icons-png.flaticon.com/512/28/28969.png';
 }

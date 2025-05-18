@@ -5,8 +5,8 @@ import { CommonModule } from '@angular/common';
 import { CommentSectionComponent } from '../../comment-section/comment-section.component';
 import { FormatBytesPipe } from '../../pipes/format-bytes.pipe';
 import { User } from '../../models/user.model';
-import { UserService } from '../../models/user.service';
-import { TorrentService } from '../../models/torrent.service'; // TorrentService importálása
+import { AuthService } from '../../services/user.service';
+import { TorrentService } from '../../services/torrent.service'; // TorrentService importálása
 import { Torrent } from '../../models/torrent.model';  // Torrent model importálása
 
 @Component({
@@ -17,48 +17,62 @@ import { Torrent } from '../../models/torrent.model';  // Torrent model importá
   styleUrls: ['./torrent-detail.component.scss']
 })
 export class TorrentDetailComponent implements OnInit {
+  user: User | null = null;
   currentUser: User | null = null;
   isBanned: boolean = false;
   torrentId!: number;
   torrent?: Torrent;
 
   constructor(
-    private userService: UserService,
+    private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
     private torrentService: TorrentService // TorrentService injektálása
   ) {}
 
   ngOnInit(): void {
-    this.currentUser = this.userService.currentUserValue;
+  this.authService.isLoggedIn().subscribe(user => {
+    if (user) {
+      this.user = {
+        id: 1, // vagy valós adat ha van külön tárolva
+        username: user.displayName || '',
+        email: user.email || '',
+        password: '', // firebase nem adja vissza
+        banned: false,
+        role: 'user',
+        rejectedTorrents: [],
+        torrents: []
+      };
 
-    if (!this.currentUser) {
+      if (this.user.banned) {
+        this.isBanned = true;
+        // akár átirányítás vagy figyelmeztetés itt
+      }
+
+      const idParam = this.route.snapshot.paramMap.get('id');
+      this.torrentId = idParam ? Number(idParam) : NaN;
+
+      if (isNaN(this.torrentId)) {
+        console.error('Érvénytelen torrent ID');
+        return;
+      }
+
+      // Itt iratkozz fel az Observable-re:
+      this.torrentService.getTorrents().subscribe(torrents => {
+        const found = torrents.find(t => t.id.toString() === this.torrentId.toString());
+        if (!found) {
+          console.error('A torrent nem található!');
+          return;
+        }
+        this.torrent = found;
+
+        if (!this.torrent.imageUrl) {
+          this.torrent.imageUrl = 'https://cdn-icons-png.flaticon.com/512/28/28969.png';
+        }
+      });
+    } else {
       this.router.navigate(['/login']);
-      return;
     }
-
-    this.isBanned = this.currentUser.banned ?? false;
-
-    const idParam = this.route.snapshot.paramMap.get('id');
-    this.torrentId = idParam ? Number(idParam) : NaN;
-
-    if (isNaN(this.torrentId)) {
-      console.error('Érvénytelen torrent ID');
-      return;
-    }
-
-    // A torrentek betöltése a TorrentService-ből
-    const torrents: Torrent[] = this.torrentService.getTorrents();
-    const found = torrents.find(t => t.id === this.torrentId);
-
-    if (!found) {
-      console.error('A torrent nem található!');
-      return;
-    }
-    this.torrent = found;
-
-    if (!this.torrent.imageUrl) {
-      this.torrent.imageUrl = 'https://cdn-icons-png.flaticon.com/512/28/28969.png';
-    }
-  }
+  });
+}
 }

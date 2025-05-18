@@ -5,7 +5,7 @@
 
 
   <div class="mobile-only">
-    <div class="torrent-card" *ngFor="let torrent of approvedTorrents">
+    <div class="torrent-card" *ngFor="let torrent of torrentsApproved$ | async">
       <p><strong>Név:</strong> {{ torrent.name }}</p>
       <p><strong>Kategória:</strong> {{ torrent.category }}</p>
       <p><strong>Feltöltő:</strong> {{ torrent.uploader }}</p>
@@ -27,7 +27,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let torrent of approvedTorrents">
+      <tr *ngFor="let torrent of torrentsApproved$ | async">
         <td>{{ torrent.name }}</td>
         <td>{{ torrent.category }}</td>
         <td>{{ torrent.uploader }}</td>
@@ -43,16 +43,16 @@
 
 
   <div class="mobile-only">
-    <div class="torrent-card" *ngFor="let torrent of torrents">
+    <div class="torrent-card" *ngFor="let torrent of torrentsPending$ | async">
       <p><strong>Név:</strong> {{ torrent.name }}</p>
       <p><strong>Kategória:</strong> {{ torrent.category }}</p>
       <p><strong>Feltöltő:</strong> {{ torrent.uploader }}</p>
       <p><strong>Méret:</strong> {{ torrent.size }}</p>
       <p><strong>Állapot:</strong> {{ torrent.status }}</p>
       <div *ngIf="torrent.status === 'pending'">
-        <!--<button (click)="approveTorrent(torrent.id)">Jóváhagyás</button>
-        <button (click)="rejectTorrent(torrent.id)">Elutasítás</button>
-        <input [(ngModel)]="rejectReason" placeholder="Indok" />-->
+        <button (click)="approveTorrent(torrent.id.toString())">Jóváhagyás</button>
+        <button (click)="rejectTorrent(torrent.id.toString())">Elutasítás</button>
+        <input [(ngModel)]="rejectReason" placeholder="Indok" />
       </div>
     </div>
   </div>
@@ -69,19 +69,19 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let torrent of torrents">
+      <tr *ngFor="let torrent of torrentsPending$ | async">
         <td>{{ torrent.name }}</td>
         <td>{{ torrent.category }}</td>
         <td>{{ torrent.uploader }}</td>
         <td>{{ torrent.size }}</td>
         <td>{{ torrent.status }}</td>
-        <!--
+        
         <td>
-          <button *ngIf="torrent.status === 'pending'" (click)="approveTorrent(torrent.id)">Jóváhagyás</button>
-          <button *ngIf="torrent.status === 'pending'" (click)="rejectTorrent(torrent.id)">Elutasítás</button>
+          <button *ngIf="torrent.status === 'pending'" (click)="approveTorrent(torrent.id.toString())">Jóváhagyás</button>
+          <button *ngIf="torrent.status === 'pending'" (click)="rejectTorrent(torrent.id.toString())">Elutasítás</button>
           <input *ngIf="torrent.status === 'pending'" [(ngModel)]="rejectReason" placeholder="Indok" />
         </td>
-        !-->
+        
       </tr>
     </tbody>
   </table>
@@ -89,7 +89,7 @@
   <h3>Elutasított Torrentek</h3>
 
   <div class="mobile-only">
-    <div class="torrent-card" *ngFor="let torrent of rejectedTorrents">
+    <div class="torrent-card" *ngFor="let torrent of torrentsRejected$ | async">
       <p><strong>Név:</strong> {{ torrent.name }}</p>
       <p><strong>Kategória:</strong> {{ torrent.category }}</p>
       <p><strong>Feltöltő:</strong> {{ torrent.uploader }}</p>
@@ -109,7 +109,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let torrent of rejectedTorrents">
+      <tr *ngFor="let torrent of torrentsRejected$ | async">
         <td>{{ torrent.name }}</td>
         <td>{{ torrent.category }}</td>
         <td>{{ torrent.uploader }}</td>

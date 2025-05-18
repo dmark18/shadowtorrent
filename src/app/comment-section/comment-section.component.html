@@ -1,11 +1,12 @@
 <div class="comment-section">
     <h3>Kommentek</h3>
   
-    <div *ngFor="let comment of comments" class="comment">
-      <strong>{{ comment.username }}</strong> • 
-      <em>{{ comment.createdAt | date: 'short' }}</em>
-      <p>{{ comment.content }}</p>
-    </div>
+<div *ngFor="let comment of comments" class="comment">
+  <strong [ngClass]="getRoleClass(comment.role)">{{ comment.username }} </strong> 
+  <span *ngIf="comment.role">({{ comment.role | roleDisplay }})</span> • 
+  <em>{{ comment.createdAt | date: 'short' }}</em>
+  <p>{{ comment.content }}</p>
+</div>
   
     <div *ngIf="currentUser">
       <textarea *ngIf="!isBanned" [(ngModel)]="newComment" placeholder="Írd ide a kommentet..."></textarea>
