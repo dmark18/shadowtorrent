@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/user.service';
 import { RoleDisplayPipe } from '../pipes/roledisplay.pipe';
+import { Timestamp } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-comment-section',
@@ -43,16 +44,23 @@ export class CommentSectionComponent implements OnInit {
 
 loadComments(): void {
   this.commentService.getCommentsForTorrent(this.torrentId).subscribe((comments) => {
-    this.comments = comments;
+    this.comments = comments.map(comment => ({
+      ...comment,
+      createdAt: comment.createdAt instanceof Timestamp
+        ? comment.createdAt.toDate()
+        : comment.createdAt,
+      torrentId: Number(comment.torrentId) // biztosítjuk hogy szám legyen
+    }));
   });
 }
+
 
   addComment(): void {
   if (!this.newComment.trim()) return;
 
   const comment: Comment = {
     id: Date.now(),
-    torrentId: this.torrentId,
+    torrentId: Number(this.torrentId),
     username: this.currentUser?.username || 'Ismeretlen',
     role: this.currentUser?.role || 'user',  // ide jön a role
     content: this.newComment,

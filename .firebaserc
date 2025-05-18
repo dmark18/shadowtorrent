@@ -1,0 +1,9 @@
+{
+  "projects": {
+    "shadowtorrent": "shadowtorrent-2b81c",
+    "shadow": "shadowtorrent-2b81c",
+    "default": "shadowtorrent-2b81c"
+  },
+  "targets": {},
+  "etags": {}
+}
